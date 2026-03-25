@@ -2,8 +2,6 @@ import "@repo/ui/styles.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Figtree } from "next/font/google";
-import { ThemeProvider } from "@/modules/theme-provider";
-import { Toaster } from "@repo/ui/components";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -26,15 +24,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className={geist.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
           {children}
-          <Toaster position="top-center" />
-        </ThemeProvider>
       </body>
     </html>
   );
