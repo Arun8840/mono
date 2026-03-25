@@ -2,7 +2,6 @@ import "@repo/ui/styles.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Figtree } from "next/font/google";
-import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/modules/theme-provider";
 import { Toaster } from "@repo/ui/components";
 
@@ -23,7 +22,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("font-sans", figtree.variable)}
+      className={`font-sans ${figtree.variable}`}
       suppressHydrationWarning
     >
       <body className={geist.className}>
