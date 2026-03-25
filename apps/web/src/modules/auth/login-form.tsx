@@ -7,12 +7,15 @@ import {
   FieldGroup,
   FieldLabel,
   Input,
+  Spinner,
+  toast,
 } from "@repo/ui/components";
 
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { loginSchema, LoginSchemaInput } from "@repo/validations/login.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import Link from "next/link";
+import { signIn } from "@repo/better-auth";
 
 const LoginForm = () => {
   const form = useForm<LoginSchemaInput>({
@@ -20,16 +23,27 @@ const LoginForm = () => {
       email: "",
       password: "",
     },
-    resolver: zodResolver(loginSchema),
+    resolver: standardSchemaResolver(loginSchema),
   });
 
+  const isSubmitting = form.formState.isSubmitting;
+
   const handleLogin: SubmitHandler<LoginSchemaInput> = async (data) => {
-    console.log(data);
+    const res = await signIn.email({
+      email: data.email,
+      password: data.password,
+      callbackURL: "/",
+    });
+    if (res?.error) {
+      toast.error(res?.error?.message ?? "Something went wrong");
+    }
+    if (res.data) {
+      toast.success("Logged in successfully");
+    }
   };
   return (
     <div>
       <form
-        action=""
         onSubmit={form.handleSubmit(handleLogin)}
         className="flex flex-col gap-4"
       >
@@ -81,7 +95,9 @@ const LoginForm = () => {
             )}
           />
         </FieldGroup>
-        <Button type="submit">Login</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? <Spinner /> : "Login"}
+        </Button>
         <div className="text-center">
           <p className="text-muted-foreground text-sm p-3">
             Don't have an account?&nbsp;

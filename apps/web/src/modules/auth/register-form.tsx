@@ -6,15 +6,18 @@ import {
   FieldGroup,
   FieldLabel,
   Input,
+  Spinner,
+  toast,
 } from "@repo/ui/components";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {
   registerSchema,
   RegisterSchemaInput,
 } from "@repo/validations/register.schema";
 import Link from "next/link";
+import { signUp } from "@repo/better-auth";
 
 const RegisterForm = () => {
   const form = useForm<RegisterSchemaInput>({
@@ -22,13 +25,27 @@ const RegisterForm = () => {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
-    resolver: zodResolver(registerSchema),
+    resolver: standardSchemaResolver(registerSchema),
   });
 
+  const isSubmitting = form.formState.isSubmitting;
   const handleRegister: SubmitHandler<RegisterSchemaInput> = async (data) => {
-    console.log(data);
+    const res = await signUp.email({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      callbackURL: "/auth/login",
+    });
+    if (res?.error) {
+      toast.error(res.error.message ?? "Something went wrong");
+    }
+    if (res.data) {
+      toast.success("Registered successfully");
+    }
   };
+
   return (
     <form
       action=""
@@ -111,7 +128,9 @@ const RegisterForm = () => {
           )}
         />
       </FieldGroup>
-      <Button type="submit">Register</Button>
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? <Spinner /> : "Register"}
+      </Button>
       <div className="text-center">
         <p className="text-muted-foreground text-sm p-3">
           Already have an account?&nbsp;
