@@ -1,4 +1,5 @@
 import { About, Banner } from "../modules"
+import Projects from "../modules/Projects"
 import Skills from "../modules/Skills"
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
       <Banner />
       <About />
       <Skills />
+      <Projects />
     </div>
   )
 }

@@ -42,7 +42,7 @@ function About() {
           scrollTrigger: {
             trigger: aboutRef.current,
             start: "top 50%",
-            end: "bottom 20%",
+            end: "bottom 50%",
             scrub: 1,
           },
         },
@@ -147,7 +147,7 @@ function About() {
     <section className="min-h-screen flex flex-col gap-4 p-10 lg:p-20 relative overflow-hidden">
       <p
         ref={aboutRef}
-        className="text-2xl lg:text-4xl font-medium text-center lg:px-20 z-10"
+        className="text-2xl lg:text-4xl font-medium text-center lg:px-20 z-10 text-gray-700"
       >
         Creates impactful digital experiences through design and frontend
         development, evolving from a foundation in design into specialized

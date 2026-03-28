@@ -8,6 +8,7 @@ import Image from "next/image"
 function Banner() {
   const cardRef = useRef<HTMLDivElement>(null)
   const marqueeRef = useRef<HTMLDivElement>(null)
+  const shimmerRef = useRef<HTMLDivElement>(null)
 
   gsap.registerPlugin(ScrollTrigger)
 
@@ -21,7 +22,25 @@ function Banner() {
         },
         {
           y: 0,
+          ease: "elastic.out",
+          yoyo: true,
           duration: 1,
+        },
+      )
+      tl.fromTo(
+        shimmerRef.current,
+        {
+          opacity: 0,
+          x: -200,
+          y: -100,
+        },
+        {
+          opacity: 1,
+          x: 600,
+          y: 100,
+          repeat: -1,
+          duration: 2,
+          repeatDelay: 4,
         },
       )
       tl.fromTo(
@@ -31,7 +50,7 @@ function Banner() {
         },
         {
           y: 900,
-          scale: 0.9,
+          scale: 0.8,
           duration: 0.7,
           scrollTrigger: {
             trigger: cardRef.current,
@@ -72,7 +91,7 @@ function Banner() {
 
       <div
         ref={cardRef}
-        className="self-center w-full max-w-sm p-3  rounded-lg flex flex-col gap-2 bg-primary z-10 relative overflow-hidden"
+        className="self-center drop-shadow-2xl w-full max-w-sm p-3  rounded-lg flex flex-col gap-2 bg-primary z-10 relative overflow-hidden"
       >
         {/* // card tag */}
         <div className="w-20 h-3 rounded-full mx-auto mb-2 bg-white" />
@@ -94,10 +113,12 @@ function Banner() {
 
         {/* //* title */}
         <div className="flex-1 text-white">
-          <h1 className="text-center text-lg font-sans">P.Arun</h1>
-          <h2 className="text-center text-sm font-sans font-thin">
-            [Frontend developer]
-          </h2>
+          <code className="text-center text-lg font-sans">
+            <pre>P.Arun</pre>
+          </code>
+          <code className="text-center text-sm font-sans font-thin">
+            <pre>[Frontend developer]</pre>
+          </code>
 
           <div className="flex justify-center gap-2 py-3 text-black font-medium">
             <span className="bg-lime-200 rounded-full px-2 text-xs">Rect</span>
@@ -139,6 +160,12 @@ function Banner() {
             <pre className=" text-xs text-lime-200">2026</pre>
           </code>
         </div>
+
+        {/* //shimmer effect */}
+        <div
+          ref={shimmerRef}
+          className="bg-linear-30 from-white to-white w-20 h-full absolute -z-1 left-0 top-0 blur-3xl rotate-3"
+        />
       </div>
     </section>
   )
