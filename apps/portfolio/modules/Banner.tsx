@@ -1,22 +1,22 @@
-"use client"
-import React, { useRef } from "react"
-import { useGSAP } from "@gsap/react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Image from "next/image"
+"use client";
+import React, { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 
 function Banner() {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const marqueeRef = useRef<HTMLDivElement>(null)
-  const shimmerRef = useRef<HTMLDivElement>(null)
-  const leftArrowRef = useRef<HTMLDivElement>(null)
-  const rightArrowRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const shimmerRef = useRef<HTMLDivElement>(null);
+  const leftArrowRef = useRef<HTMLDivElement>(null);
+  const rightArrowRef = useRef<HTMLDivElement>(null);
 
-  gsap.registerPlugin(ScrollTrigger)
+  gsap.registerPlugin(ScrollTrigger);
 
   useGSAP(
     () => {
-      const tl = gsap.timeline({ paused: false })
+      const tl = gsap.timeline({ paused: false });
       tl.fromTo(
         cardRef.current,
         {
@@ -28,7 +28,7 @@ function Banner() {
           yoyo: true,
           duration: 1,
         },
-      )
+      );
       tl.fromTo(
         shimmerRef.current,
         {
@@ -44,7 +44,7 @@ function Banner() {
           duration: 2,
           repeatDelay: 4,
         },
-      )
+      );
       tl.fromTo(
         cardRef.current,
         {
@@ -64,35 +64,35 @@ function Banner() {
                 opacity: 1,
                 duration: 0.5,
                 stagger: 0.4,
-              })
+              });
             },
             onEnterBack: () => {
               gsap.to([leftArrowRef.current, rightArrowRef.current], {
                 opacity: 0,
                 duration: 0.3,
                 stagger: 0.1,
-              })
+              });
             },
           },
         },
-      )
-      const marquee = marqueeRef.current
-      if (!marquee) return
+      );
+      const marquee = marqueeRef.current;
+      if (!marquee) return;
 
-      gsap.set(marquee, { x: 0 })
+      gsap.set(marquee, { x: 0 });
       gsap.to(marquee, {
         x: "-50%",
         duration: 20,
         ease: "none",
         repeat: -1,
-      })
+      });
     },
     { scope: cardRef },
-  )
+  );
 
   const createRightArrow = () => {
     return (
-      <div ref={rightArrowRef} className="flex flex-1 opacity-0">
+      <div ref={rightArrowRef} className="hidden lg:flex flex-1 opacity-0">
         <div className="flex justify-start">
           <svg
             viewBox="0 0 100 100"
@@ -103,7 +103,6 @@ function Banner() {
             strokeLinejoin="round"
             className="size-20 text-yellow-500"
           >
-            {/* Flecha Directa Derecha (para React) */}
             <path
               d="M10 50 C 25 45, 40 55, 70 50 L 90 50"
               strokeDasharray="3 3"
@@ -118,13 +117,13 @@ function Banner() {
           and designers to craft seamless, high-fidelity user experiences.
         </p>
       </div>
-    )
-  }
+    );
+  };
   const createLeftArrow = () => {
     return (
       <div
         ref={leftArrowRef}
-        className="flex flex-col justify-end items-end flex-1 opacity-0"
+        className="hidden lg:flex flex-col justify-end items-end flex-1 opacity-0"
       >
         <div className="flex justify-end">
           <svg
@@ -136,7 +135,6 @@ function Banner() {
             strokeLinejoin="round"
             className="size-20 text-amber-500 rotate-180"
           >
-            {/* Curva Suave Ascendente (para Next.js) */}
             <path
               d="M10 80 C 30 70, 50 80, 70 40 L 80 20"
               strokeDasharray="2 4"
@@ -151,36 +149,35 @@ function Banner() {
           </span>
           of professional experience at
           <span className="text-primary">Zetta Stack Systems Pvt</span>. Ltd.
-          I'm passionate about creating responsive, interactive, and
+          I&apos;m passionate about creating responsive, interactive, and
           user-friendly web applications.
         </p>
       </div>
-    )
-  }
+    );
+  };
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center p-5 bg-white lg:p-20 relative">
+    <section className="min-h-screen flex flex-col justify-center items-center p-4 sm:p-8 lg:p-20 bg-white relative">
       <div className="absolute size-full grid place-items-center ">
-        <div className="w-full overflow-hidden whitespace-nowrap  p-2">
+        <div className="w-full overflow-hidden whitespace-nowrap p-2">
           <div ref={marqueeRef} className="inline-block">
-            <h1 className="text-[10rem] uppercase font-extrabold inline-block text-muted">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] uppercase font-extrabold inline-block text-muted">
               Frontend Developer&nbsp;&nbsp;&nbsp;&nbsp;
             </h1>
-            <h1 className="text-[10rem] uppercase font-extrabold inline-block text-muted">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] uppercase font-extrabold inline-block text-muted">
               Frontend Developer&nbsp;&nbsp;&nbsp;&nbsp;
             </h1>
           </div>
         </div>
       </div>
 
-      <div ref={cardRef} className="w-full flex justify-center">
-        {/* // arows */}
+      <div
+        ref={cardRef}
+        className="w-full flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-8"
+      >
         {createLeftArrow()}
-        <div className="flex-1  self-center  w-full max-w-sm p-3  rounded-lg flex flex-col gap-2 bg-primary z-10 relative overflow-hidden">
-          {/* // card tag */}
+        <div className="flex-1 self-center w-full max-w-sm p-3 rounded-lg flex flex-col gap-2 bg-primary z-10 relative overflow-hidden">
           <div className="w-20 h-3 rounded-full mx-auto mb-2 bg-white" />
-          {/* // card image */}
-          <div className="w-50 h-60 mx-auto mb-2 relative">
-            {/* // resize handler */}
+          <div className="w-full sm:w-50 h-48 sm:h-60 mx-auto mb-2 relative">
             <Image
               src={"/bannerprofile.png"}
               alt="bannerprofile"
@@ -188,13 +185,12 @@ function Banner() {
               className="object-cover"
               loading="lazy"
             />
-            <div className="w-2 h-2 bg-lime-200  absolute -top-1 -left-1" />
-            <div className="w-2 h-2 bg-lime-200  absolute -top-1 -right-1" />
-            <div className="w-2 h-2 bg-lime-200  absolute -bottom-1 -left-1" />
-            <div className="w-2 h-2 bg-lime-200  absolute -bottom-1 -right-1" />
+            <div className="w-2 h-2 bg-lime-200 absolute -top-1 -left-1" />
+            <div className="w-2 h-2 bg-lime-200 absolute -top-1 -right-1" />
+            <div className="w-2 h-2 bg-lime-200 absolute -bottom-1 -left-1" />
+            <div className="w-2 h-2 bg-lime-200 absolute -bottom-1 -right-1" />
           </div>
 
-          {/* //* title */}
           <div className="flex-1 text-white">
             <code className="text-center text-lg font-sans">
               <pre>P.Arun</pre>
@@ -203,9 +199,9 @@ function Banner() {
               <pre>[Frontend developer]</pre>
             </code>
 
-            <div className="flex justify-center gap-2 py-3 text-black font-medium">
+            <div className="flex flex-wrap justify-center gap-2 py-3 text-black font-medium">
               <span className="bg-lime-200 rounded-full px-2 text-xs">
-                Rect
+                React
               </span>
               <span className="bg-lime-200 rounded-full px-2 text-xs">
                 Next Js
@@ -216,11 +212,9 @@ function Banner() {
             </div>
           </div>
 
-          {/* // separator */}
-          <div className="border-t w-full border-dashed border-lime-200 my-5 relative after:absolute after:-top-3.5 after:-left-3 after:w-3 after:h-7 after:bg-white after:rounded-r-full after:content-[''] before:absolute before:-top-3.5 before:-right-3 before:w-3 before:h-7 before:bg-white before:rounded-l-full before:content-['']" />
+          <div className="border-t w-full border-dashed border-lime-200 my-3 sm:my-5 relative after:absolute after:-top-3.5 after:-left-3 after:w-3 after:h-7 after:bg-white after:rounded-r-full after:content-[''] before:absolute before:-top-3.5 before:-right-3 before:w-3 before:h-7 before:bg-white before:rounded-l-full before:content-['']" />
 
-          {/* // bar code design */}
-          <div className="flex items-center justify-center gap-1">
+          <div className="hidden sm:flex items-center justify-center gap-1 overflow-hidden">
             {[
               0.5, 2.2, 1.4, 3, 0.2, 2.1, 1.8, 1, 2.4, 0.8, 3, 1.2, 2, 1.5, 0.2,
               2.6, 3, 1.1, 2.2, 1, 0.4, 2, 1.3, 3, 1, 2.5, 1.2, 0.2, 2, 1.7,
@@ -235,7 +229,6 @@ function Banner() {
             ))}
           </div>
 
-          {/* rights */}
           <div className="p-4 flex justify-between items-center">
             <code>
               <pre className=" text-xs text-lime-200">CODE BY ARUN</pre>
@@ -246,7 +239,6 @@ function Banner() {
             </code>
           </div>
 
-          {/* //shimmer effect */}
           <div
             ref={shimmerRef}
             className="bg-linear-30 from-white to-white w-20 h-full absolute -z-1 left-0 top-0 blur-2xl rotate-3"
@@ -255,7 +247,7 @@ function Banner() {
         {createRightArrow()}
       </div>
     </section>
-  )
+  );
 }
 
-export default Banner
+export default Banner;
