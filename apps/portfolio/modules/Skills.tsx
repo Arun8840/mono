@@ -1,10 +1,10 @@
-"use client"
-import React from "react"
-import { categorizedSkills } from "../data/skills"
-import { Button } from "@repo/ui/components"
+"use client";
+import React from "react";
+import { categorizedSkills } from "../data/skills";
+import { Button } from "@repo/ui/components";
 interface SkillGroup {
-  category: string
-  items: string[]
+  category: string;
+  items: string[];
 }
 
 function Skills() {
@@ -12,7 +12,7 @@ function Skills() {
     <div className="w-full min-h-screen flex flex-col p-5 lg:p-20 relative">
       <div className="container mx-auto size-full flex flex-col text-center">
         {/* <h1 className="text-4xl font-bold py-2 font-sans">Skills</h1> */}
-        <p className="text-3xl text-gray-700 ">
+        <p className="text-xl sm:text-2xl lg:text-3xl text-gray-700 ">
           <span className="font-sans font-semibold">
             Here are some of the &nbsp;
           </span>
@@ -48,27 +48,30 @@ function Skills() {
         />
       </svg>
 
-      <div className="lg:w-1/2 mx-auto relative flex-1 flex flex-col justify-between">
-        <div className="absolute left-1/2 top-0 bottom-0 border-l border-dashed border-primary transform -translate-x-1/2" />
+      <div className="lg:w-1/2 mx-auto relative flex-1 flex flex-col justify-between mt-8 lg:mt-0">
+        <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 border-l border-dashed border-primary transform -translate-x-1/2" />
 
         {categorizedSkills.map((skillGroup, index) => (
           <div
             key={skillGroup.category}
-            className="relative flex items-center mb-8 last:mb-0"
+            className="relative flex flex-col lg:flex-row lg:items-center mb-6 lg:mb-8 last:mb-0"
           >
-            <div className="w-1/2 pr-3 text-right">
-              <h3 className="font-sans font-semibold text-primary">
+            <div className="lg:w-1/2 lg:pr-3 lg:text-right mb-2 lg:mb-0">
+              <h3 className="font-sans font-semibold text-primary text-lg lg:text-xl">
                 {skillGroup.category}
               </h3>
             </div>
-            <div className="w-1/2 pl-3">
+            <div className="lg:w-1/2 lg:pl-3">
               <div className="flex flex-wrap gap-2">
                 {skillGroup.items.map((item) => (
                   <div
                     key={item?.name}
-                    className="px-3 py-1 text-secondary-foreground font-medium rounded-full text-sm font-sans flex items-center"
+                    className="px-2 sm:px-3 py-1 text-secondary-foreground font-medium rounded-full text-xs sm:text-sm font-sans flex items-center"
                   >
-                    <span className="mr-2"> {item?.icon} </span>
+                    <span className="mr-1 sm:mr-2 text-sm sm:text-base">
+                      {" "}
+                      {item?.icon}{" "}
+                    </span>
                     <span>{item?.name}</span>
                   </div>
                 ))}
@@ -78,7 +81,7 @@ function Skills() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default Skills
+export default Skills;

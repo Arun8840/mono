@@ -1,9 +1,9 @@
-"use client"
-import { useGSAP } from "@gsap/react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Link from "next/link"
-import React, { useRef } from "react"
+"use client";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
+import React, { useRef } from "react";
 
 const projectsItems = [
   {
@@ -53,14 +53,14 @@ const projectsItems = [
     status: "In Progress",
     tags: ["ElysiaJS", "Neon DB", "Shadcn UI", "Drizzle"],
   },
-]
+];
 
 function Projects() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  gsap.registerPlugin(ScrollTrigger)
+  const containerRef = useRef<HTMLDivElement>(null);
+  gsap.registerPlugin(ScrollTrigger);
   useGSAP(
     () => {
-      if (!containerRef.current) return
+      if (!containerRef.current) return;
       gsap.fromTo(
         containerRef.current.children,
         {
@@ -80,49 +80,49 @@ function Projects() {
             end: "bottom",
           },
         },
-      )
+      );
     },
     { scope: containerRef },
-  )
+  );
   return (
-    <section className="min-h-screen flex flex-col lg:p-10">
-      <h1 className="text-4xl font-bold p-5 lg:p-10 font-sans text-center text-gray-700">
+    <section className="min-h-screen flex flex-col p-5 sm:p-8 lg:p-10">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold p-3 lg:p-10 font-sans text-center text-gray-700">
         My Works
       </h1>
       <div
         ref={containerRef}
-        className="flex-1 flex flex-col gap-4 p-4 divide-y"
+        className="flex-1 flex flex-col gap-4 p-2 sm:p-4 divide-y"
       >
         {projectsItems?.map((pro, proIdx) => {
           return (
             <div
               key={`${pro?.id}-${pro?.title}_${proIdx}`}
-              className="flex justify-center gap-4 w-full max-w-5xl mx-auto"
+              className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 w-full max-w-5xl mx-auto p-3 sm:p-4"
             >
-              <h1 className="text-xl flex-1">
-                <span className="text-primary text-xl font-caveat">
+              <h1 className="text-lg sm:text-xl flex-none sm:flex-1">
+                <span className="text-primary text-lg sm:text-xl font-caveat">
                   {proIdx + 1}.&nbsp;
                 </span>
                 <span className="text-gray-700"> {pro?.title}</span>
               </h1>
 
               <div className="space-y-2 pb-2">
-                <p className="w-full max-w-md text-muted-foreground pb-2 text-sm">
+                <p className="w-full max-w-full sm:max-w-md text-muted-foreground pb-2 text-xs sm:text-sm">
                   {pro?.description}
                 </p>
                 <Link
                   href={pro?.link}
-                  className="text-primary text-sm hover:underline"
+                  className="text-primary text-xs sm:text-sm hover:underline break-all sm:break-normal"
                 >
                   {pro?.link}
                 </Link>
               </div>
             </div>
-          )
+          );
         })}
       </div>
     </section>
-  )
+  );
 }
 
-export default Projects
+export default Projects;
