@@ -1,34 +1,47 @@
-"use client";
-import React, { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
+"use client"
+import React, { useRef, useEffect } from "react"
+import { useGSAP } from "@gsap/react"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import Image from "next/image"
+
+const FLAIR_IMAGES = [
+  "https://assets.codepen.io/16327/Revised+Flair.png",
+  "https://assets.codepen.io/16327/Revised+Flair-1.png",
+  "https://assets.codepen.io/16327/Revised+Flair-2.png",
+  "https://assets.codepen.io/16327/Revised+Flair-3.png",
+  "https://assets.codepen.io/16327/Revised+Flair-4.png",
+  "https://assets.codepen.io/16327/Revised+Flair-5.png",
+  "https://assets.codepen.io/16327/Revised+Flair-6.png",
+  "https://assets.codepen.io/16327/Revised+Flair-7.png",
+  "https://assets.codepen.io/16327/Revised+Flair-8.png",
+]
+
+function playAnimation(shape: Element) {
+  const tl = gsap.timeline()
+  tl.fromTo(
+    shape,
+    { opacity: 0, scale: 0 },
+    { opacity: 1, scale: 1, ease: "elastic.out(1, 0.3)" },
+  )
+    .to(shape, { rotation: "random([-360, 360])" }, "<0.5")
+    .to(shape, { y: "120vh", ease: "back.in(.4)", duration: 1 }, 0)
+}
 
 function Banner() {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const marqueeRef = useRef<HTMLDivElement>(null);
-  const shimmerRef = useRef<HTMLDivElement>(null);
-  const leftArrowRef = useRef<HTMLDivElement>(null);
-  const rightArrowRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null)
+  const marqueeRef = useRef<HTMLDivElement>(null)
+  const shimmerRef = useRef<HTMLDivElement>(null)
+  const leftArrowRef = useRef<HTMLDivElement>(null)
+  const rightArrowRef = useRef<HTMLDivElement>(null)
+  const flairContainerRef = useRef<HTMLDivElement>(null)
+  const bannerRef = useRef<HTMLDivElement>(null)
 
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger)
 
   useGSAP(
     () => {
-      const tl = gsap.timeline({ paused: false });
-      tl.fromTo(
-        cardRef.current,
-        {
-          y: -100,
-        },
-        {
-          y: 0,
-          ease: "elastic.out",
-          yoyo: true,
-          duration: 1,
-        },
-      );
+      const tl = gsap.timeline({ paused: false })
       tl.fromTo(
         shimmerRef.current,
         {
@@ -40,18 +53,19 @@ function Banner() {
           opacity: 1,
           x: 600,
           y: 100,
+          delay: 1,
           repeat: -1,
           duration: 2,
           repeatDelay: 4,
         },
-      );
+      )
       tl.fromTo(
         cardRef.current,
         {
           y: 0,
         },
         {
-          y: 950,
+          y: 1000,
           scale: 0.8,
           duration: 0.7,
           scrollTrigger: {
@@ -64,31 +78,91 @@ function Banner() {
                 opacity: 1,
                 duration: 0.5,
                 stagger: 0.4,
-              });
+              })
             },
             onEnterBack: () => {
               gsap.to([leftArrowRef.current, rightArrowRef.current], {
                 opacity: 0,
                 duration: 0.3,
                 stagger: 0.1,
-              });
+              })
             },
           },
         },
-      );
-      const marquee = marqueeRef.current;
-      if (!marquee) return;
+      )
+      const marquee = marqueeRef.current
+      if (!marquee) return
 
-      gsap.set(marquee, { x: 0 });
+      gsap.set(marquee, { x: 0 })
       gsap.to(marquee, {
         x: "-50%",
         duration: 20,
         ease: "none",
         repeat: -1,
-      });
+      })
     },
     { scope: cardRef },
-  );
+  )
+
+  useEffect(() => {
+    const banner = bannerRef.current
+    if (!banner) return
+
+    const flair = document.querySelectorAll<HTMLImageElement>(".flair")
+    if (flair.length === 0) return
+
+    const gap = 100
+    let index = 0
+    const wrapper = gsap.utils.wrap(0, flair.length)
+    const mousePos = { x: 0, y: 0 }
+    let lastMousePos = { x: 0, y: 0 }
+
+    gsap.defaults({ duration: 1 })
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mousePos.x = e.clientX
+      mousePos.y = e.clientY
+    }
+
+    banner.addEventListener("mousemove", handleMouseMove)
+
+    function animateImage() {
+      const wrappedIndex = wrapper(index)
+      const img = flair[wrappedIndex]
+      if (!img) return
+
+      gsap.killTweensOf(img)
+      gsap.set(img, { clearProps: "all" })
+      gsap.set(img, {
+        left: mousePos.x,
+        top: mousePos.y,
+        xPercent: -50,
+        yPercent: -50,
+      })
+
+      playAnimation(img)
+      index++
+    }
+
+    const tickerCallback = () => {
+      const travelDistance = Math.hypot(
+        lastMousePos.x - mousePos.x,
+        lastMousePos.y - mousePos.y,
+      )
+
+      if (travelDistance > gap) {
+        animateImage()
+        lastMousePos = { x: mousePos.x, y: mousePos.y }
+      }
+    }
+
+    gsap.ticker.add(tickerCallback)
+
+    return () => {
+      banner.removeEventListener("mousemove", handleMouseMove)
+      gsap.ticker.remove(tickerCallback)
+    }
+  }, [])
 
   const createRightArrow = () => {
     return (
@@ -117,8 +191,8 @@ function Banner() {
           and designers to craft seamless, high-fidelity user experiences.
         </p>
       </div>
-    );
-  };
+    )
+  }
   const createLeftArrow = () => {
     return (
       <div
@@ -153,17 +227,34 @@ function Banner() {
           user-friendly web applications.
         </p>
       </div>
-    );
-  };
+    )
+  }
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center p-4 sm:p-8 lg:p-20 bg-white relative">
+    <section
+      ref={bannerRef}
+      className="min-h-screen flex flex-col justify-center items-center p-4 sm:p-8 lg:p-20 bg-black relative"
+    >
+      <div
+        ref={flairContainerRef}
+        className="fixed inset-0 pointer-events-none z-50"
+      >
+        {FLAIR_IMAGES.map((src, i) => (
+          <img
+            key={i}
+            src={src}
+            alt="flair"
+            className="flair absolute size-12 object-contain"
+            style={{ opacity: 0, position: "fixed" }}
+          />
+        ))}
+      </div>
       <div className="absolute size-full grid place-items-center ">
         <div className="w-full overflow-hidden whitespace-nowrap p-2">
           <div ref={marqueeRef} className="inline-block">
-            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] uppercase font-extrabold inline-block text-muted">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] uppercase font-extrabold inline-block text-white/10">
               Frontend Developer&nbsp;&nbsp;&nbsp;&nbsp;
             </h1>
-            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] uppercase font-extrabold inline-block text-muted">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] uppercase font-extrabold inline-block text-white/10">
               Frontend Developer&nbsp;&nbsp;&nbsp;&nbsp;
             </h1>
           </div>
@@ -172,7 +263,7 @@ function Banner() {
 
       <div
         ref={cardRef}
-        className="w-full flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-8"
+        className="w-full flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-8 z-1"
       >
         {createLeftArrow()}
         <div className="flex-1 self-center w-full max-w-sm p-3 rounded-lg flex flex-col gap-2 bg-primary z-10 relative overflow-hidden">
@@ -191,15 +282,15 @@ function Banner() {
             <div className="w-2 h-2 bg-lime-200 absolute -bottom-1 -right-1" />
           </div>
 
-          <div className="flex-1 text-white">
-            <code className="text-center text-lg font-sans">
+          <div className="flex-1 text-muted-foreground">
+            <code className="text-center text-lg font-sans text-white">
               <pre>P.Arun</pre>
             </code>
-            <code className="text-center text-sm font-sans font-thin">
+            <code className="text-center text-sm font-sans font-thin text-white">
               <pre>[Frontend developer]</pre>
             </code>
 
-            <div className="flex flex-wrap justify-center gap-2 py-3 text-black font-medium">
+            <div className="flex flex-wrap justify-center gap-2 py-3 font-medium">
               <span className="bg-lime-200 rounded-full px-2 text-xs">
                 React
               </span>
@@ -247,7 +338,7 @@ function Banner() {
         {createRightArrow()}
       </div>
     </section>
-  );
+  )
 }
 
-export default Banner;
+export default Banner
