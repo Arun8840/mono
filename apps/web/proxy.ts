@@ -8,15 +8,15 @@ export async function proxy(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/auth/login") ||
     request.nextUrl.pathname.startsWith("/auth/register")
 
-  // if (!session && !isAuthPage) {
-  //   const loginUrl = new URL("/auth/login", request.url)
-  //   return NextResponse.redirect(loginUrl)
-  // }
+  if (!session && !isAuthPage) {
+    const loginUrl = new URL("/auth/login", request.url)
+    return NextResponse.redirect(loginUrl)
+  }
 
-  // // Prevent logged-in users from hitting auth pages
-  // if (session && isAuthPage) {
-  //   return NextResponse.redirect(new URL("/", request.url))
-  // }
+  // Prevent logged-in users from hitting auth pages
+  if (session && isAuthPage) {
+    return NextResponse.redirect(new URL("/", request.url))
+  }
 
   return NextResponse.next()
 }
