@@ -1,1 +1,1 @@
-export * from "./task.plugin"
+export { dragPlugin } from "./drag.plugin";

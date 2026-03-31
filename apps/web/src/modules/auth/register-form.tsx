@@ -12,10 +12,7 @@ import {
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import {
-  registerSchema,
-  RegisterSchemaInput,
-} from "@repo/validations/register.schema";
+import { registerSchema, RegisterSchemaInput } from "@repo/validations";
 import Link from "next/link";
 import { signUp } from "@repo/better-auth";
 
