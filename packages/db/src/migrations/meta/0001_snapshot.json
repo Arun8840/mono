@@ -1,6 +1,6 @@
 {
-  "id": "286dac6c-f0b9-491b-a60a-61d3353b64c9",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "66a11d6f-5109-4991-bd73-a4c19a013d11",
+  "prevId": "286dac6c-f0b9-491b-a60a-61d3353b64c9",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -352,6 +352,37 @@
           "with": {}
         }
       },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.dragItems": {
+      "name": "dragItems",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lable": {
+          "name": "lable",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
