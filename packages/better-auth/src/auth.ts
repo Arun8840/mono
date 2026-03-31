@@ -1,8 +1,8 @@
-import { betterAuth } from "better-auth"
-import { drizzleAdapter } from "@better-auth/drizzle-adapter"
-import { env } from "@repo/env"
-import { db } from "@repo/db"
-import * as schema from "@repo/db/schema"
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "@better-auth/drizzle-adapter";
+import { env } from "@repo/env";
+import { db } from "@repo/db";
+import * as schema from "@repo/db/schema";
 
 export const auth = betterAuth({
   baseUrl: env.NEXT_PUBLIC_APP_URL,
@@ -14,8 +14,8 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  trustedOrigins: [env.NEXT_PUBLIC_APP_URL, "http://localhost:3001"],
-})
+  trustedOrigins: [env.NEXT_PUBLIC_APP_URL],
+});
 
-export type Session = typeof auth.$Infer.Session
-export type User = typeof auth.$Infer.Session.user
+export type Session = typeof auth.$Infer.Session;
+export type User = typeof auth.$Infer.Session.user;

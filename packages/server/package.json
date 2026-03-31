@@ -6,7 +6,9 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "dev": "bun run src/index.ts"
+    "dev": "bun --env-file=../../.env run src/index.ts",
+    "build": "bun build src/index.ts --outdir dist",
+    "start": "bun --env-file=../../.env run dist/index.js"
   },
   "dependencies": {
     "@elysiajs/eden": "^1.4.8",
