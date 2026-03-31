@@ -1,6 +1,6 @@
-import { Elysia } from "elysia"
-import { taskController } from "./controller/task.controller"
+import { Elysia } from "elysia";
+import { dragController } from "./controller";
 
-export const app = new Elysia({ prefix: "/api" }).use(taskController)
+export const app = new Elysia({ prefix: "/api" }).use(dragController);
 
-export type App = typeof app
+export type App = typeof app;
