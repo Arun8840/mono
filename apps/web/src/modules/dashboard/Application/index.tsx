@@ -1,6 +1,5 @@
 "use client"
 import { Button, ModalDrawer, Spinner } from "@repo/ui/components"
-import React from "react"
 import Header from "../Header"
 import { useGetModalState } from "@repo/ui/hooks/use-get-modal-state"
 import { useQuery } from "@tanstack/react-query"
@@ -12,8 +11,14 @@ import {
   AiProgrammingIcon,
 } from "@hugeicons/core-free-icons"
 import { ApplicationForm } from "./application-form"
+import { useRouter } from "next/navigation"
 
+type appCardType = {
+  title: string
+  id: string
+}
 function Application() {
+  const navigation = useRouter()
   const { data, isPending, isError } = useQuery({
     queryKey: ["application-templates"],
     queryFn: async () => {
@@ -26,6 +31,19 @@ function Application() {
   const { open, isOpen, setIsOpen, close } = useGetModalState({
     value: "create-application",
   })
+
+  const createAppCard = (item: appCardType) => {
+    return (
+      <div
+        key={item?.id}
+        onDoubleClick={() => navigation.push(`/${item?.id}`)}
+        className="border bg-card rounded p-2 h-70 flex flex-col gap-2 justify-center items-center text-muted-foreground"
+      >
+        <HugeiconsIcon icon={AiProgrammingIcon} />
+        <small>{item?.title}</small>
+      </div>
+    )
+  }
 
   if (isPending)
     return (
@@ -61,19 +79,9 @@ function Application() {
         <ApplicationForm afterClose={close} />
       </ModalDrawer>
 
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
         {Array.isArray(appItems) &&
-          appItems?.map((item) => {
-            return (
-              <div
-                key={item?.id}
-                className="border bg-card rounded p-2 h-70 flex flex-col gap-2 justify-center items-center text-muted-foreground"
-              >
-                <HugeiconsIcon icon={AiProgrammingIcon} />
-                <small>{item?.title}</small>
-              </div>
-            )
-          })}
+          appItems?.map((item) => createAppCard(item))}
       </div>
     </section>
   )

@@ -10,33 +10,39 @@ import {
   Spinner,
   toast,
 } from "@repo/ui/components"
+
 import {
-  CreateApplicationInputType,
-  createApplicationSchema,
-} from "@repo/validations"
+  CreatePageInputType,
+  createPageSchema,
+} from "@repo/validations/application.schema"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import React from "react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 
-type ApplicationFormProps = {
+type PageFormProps = {
   afterClose?: () => void
+  applicationId: string
 }
 
-export const ApplicationForm: React.FC<ApplicationFormProps> = ({
+export const PageForm: React.FC<PageFormProps> = ({
   afterClose,
+  applicationId,
 }) => {
   const utils = useQueryClient()
   const addApplication = useMutation({
-    mutationFn: async (req: CreateApplicationInputType) => {
+    mutationFn: async (req: CreatePageInputType) => {
       const body = {
         title: req.title,
         description: req.description,
+        applicationId: req.applicationId,
       }
-      const res = await client.app.create.post(body)
+      const res = await client.app.pages.create.post(body)
       return res
     },
     onSuccess: async (context) => {
-      await utils.invalidateQueries({ queryKey: ["application-templates"] })
+      await utils.invalidateQueries({
+        queryKey: [`application-pages-${applicationId}`],
+      })
       afterClose?.()
       toast.success(context?.data?.message)
     },
@@ -44,17 +50,16 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
       toast.error(context?.message)
     },
   })
-  const form = useForm<CreateApplicationInputType>({
+  const form = useForm<CreatePageInputType>({
     defaultValues: {
       title: "",
       description: "",
+      applicationId: applicationId,
     },
-    resolver: standardSchemaResolver(createApplicationSchema),
+    resolver: standardSchemaResolver(createPageSchema),
   })
   const isSubmitting = addApplication?.isPending || form.formState.isSubmitting
-  const handleCreate: SubmitHandler<CreateApplicationInputType> = async (
-    data,
-  ) => {
+  const handleCreate: SubmitHandler<CreatePageInputType> = async (data) => {
     addApplication.mutate(data)
   }
   return (

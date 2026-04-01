@@ -13,34 +13,45 @@ import {
 } from "@repo/ui/components"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { HomeIcon, Drag04Icon } from "@hugeicons/core-free-icons"
-const data = {
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/",
-      items: [
-        {
-          title: "Apps",
-          url: "/",
-          icon: HomeIcon,
-          isActive: false,
-        },
-        {
-          title: "Drag Items",
-          url: "/drag-items",
-          icon: Drag04Icon,
-          isActive: true,
-        },
-      ],
-    },
-  ],
-}
+import { HomeIcon, Eye, ArrowLeft } from "@hugeicons/core-free-icons"
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function EditorSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const params = useParams()
+  const appId = params.appId
   const currentPath = usePathname()
+  const data = {
+    navMain: [
+      {
+        title: "Application",
+        url: `/${appId}`,
+        items: [
+          {
+            title: "Pages",
+            url: `/${appId}`,
+            icon: HomeIcon,
+            isActive: false,
+          },
+          {
+            title: "Preview",
+            url: `/${appId}/preview`,
+            icon: Eye,
+            isActive: true,
+          },
+          {
+            title: "Back",
+            url: `/`,
+            icon: ArrowLeft,
+            isActive: true,
+          },
+        ],
+      },
+    ],
+  }
+
   return (
     <Sidebar {...props} collapsible="icon">
       <SidebarContent>
@@ -56,7 +67,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                           isActive={isActive}
-                          className="data-[active=true]:bg-primary/5"
+                          data-active={isActive}
+                          className="data-[active=true]:bg-primary rounded-md"
                           render={
                             <Link
                               href={item.url}
