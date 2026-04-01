@@ -1,31 +1,31 @@
-"use client"
-import { Button, ModalDrawer, Spinner } from "@repo/ui/components"
-import React from "react"
-import Header from "../Header"
-import { useGetModalState } from "@repo/ui/hooks/use-get-modal-state"
-import { CreateDragItemForm } from "./create-form"
-import { useQuery } from "@tanstack/react-query"
-import { client } from "@repo/server/client"
+"use client";
+import { Button, ModalDrawer, Spinner } from "@repo/ui/components";
+import React from "react";
+import Header from "../Header";
+import { useGetModalState } from "@repo/ui/hooks/use-get-modal-state";
+import { CreateDragItemForm } from "./create-form";
+import { useQuery } from "@tanstack/react-query";
+import { client } from "@repo/server/client";
 
-import { HugeiconsIcon } from "@hugeicons/react"
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   AddCircleHalfDotFreeIcons,
   ThreeDViewIcon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
 function DragItems() {
+  const { open, isOpen, setIsOpen, close } = useGetModalState({
+    value: "create-drag-item",
+  });
   const { data, isPending, isError } = useQuery({
     queryKey: ["drag-items"],
     queryFn: async () => {
-      const res = await client.dragItems.get()
-      return res
+      const res = await client.dragItems.get();
+      return res;
     },
-  })
+  });
 
-  const dragItems = data?.data || []
-  const { open, isOpen, setIsOpen, close } = useGetModalState({
-    value: "create-drag-item",
-  })
+  const dragItems = data?.data || [];
 
   if (isPending)
     return (
@@ -33,14 +33,14 @@ function DragItems() {
         <Spinner />{" "}
         <small className="ml-2 text-muted-foreground">Loading...</small>
       </div>
-    )
+    );
 
   if (isError)
     return (
       <div className="flex justify-center items-center p-3">
         <small className="text-destructive">Something went wrong</small>
       </div>
-    )
+    );
   return (
     <section className="p-4">
       <Header
@@ -71,11 +71,11 @@ function DragItems() {
               <HugeiconsIcon icon={ThreeDViewIcon} />
               <small>{item?.name}</small>
             </div>
-          )
+          );
         })}
       </div>
     </section>
-  )
+  );
 }
 
-export default DragItems
+export default DragItems;
