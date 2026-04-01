@@ -11,33 +11,33 @@ import {
   toast,
 } from "@repo/ui/components"
 import {
-  dragItemCreateSchema,
-  CreateDragItemSchemaInput,
+  CreateApplicationInputType,
+  createApplicationSchema,
 } from "@repo/validations"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import React from "react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 
-type DragItemFormProps = {
+type ApplicationFormProps = {
   afterClose?: () => void
 }
 
-export const CreateDragItemForm: React.FC<DragItemFormProps> = ({
+export const ApplicationForm: React.FC<ApplicationFormProps> = ({
   afterClose,
 }) => {
   const utils = useQueryClient()
-  const addComponent = useMutation({
-    mutationFn: async (req: CreateDragItemSchemaInput) => {
+  const addApplication = useMutation({
+    mutationFn: async (req: CreateApplicationInputType) => {
       const body = {
-        name: req.name,
-        componentType: req.componentType,
-        type: req.type,
+        title: req.title,
+        description: req.description,
       }
-      const res = await client.dragItems.create.post(body)
+      debugger
+      const res = await client.app.create.post(body)
       return res
     },
     onSuccess: async (context) => {
-      await utils.invalidateQueries({ queryKey: ["drag-items"] })
+      await utils.invalidateQueries({ queryKey: ["application-templates"] })
       afterClose?.()
       toast.success(context?.data?.message)
     },
@@ -45,19 +45,19 @@ export const CreateDragItemForm: React.FC<DragItemFormProps> = ({
       toast.error(context?.message)
     },
   })
-  const form = useForm<CreateDragItemSchemaInput>({
+  const form = useForm<CreateApplicationInputType>({
     defaultValues: {
-      name: "",
-      componentType: "button",
-      type: "component",
+      title: "",
+      description: "",
     },
-    resolver: standardSchemaResolver(dragItemCreateSchema),
+    resolver: standardSchemaResolver(createApplicationSchema),
   })
-  const isSubmitting = addComponent?.isPending || form.formState.isSubmitting
-  const handleCreate: SubmitHandler<CreateDragItemSchemaInput> = async (
+  const isSubmitting = addApplication?.isPending || form.formState.isSubmitting
+  const handleCreate: SubmitHandler<CreateApplicationInputType> = async (
     data,
   ) => {
-    addComponent.mutate(data)
+    debugger
+    addApplication.mutate(data)
   }
   return (
     <form
@@ -66,16 +66,16 @@ export const CreateDragItemForm: React.FC<DragItemFormProps> = ({
     >
       <FieldGroup>
         <Controller
-          name="name"
+          name="title"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="form-rhf-demo-name">Name</FieldLabel>
+              <FieldLabel htmlFor="form-rhf-demo-title">Title</FieldLabel>
               <Input
                 {...field}
-                id="form-rhf-demo-name"
+                id="form-rhf-demo-title"
                 aria-invalid={fieldState.invalid}
-                placeholder="Name"
+                placeholder="Title"
                 autoComplete="off"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -83,35 +83,18 @@ export const CreateDragItemForm: React.FC<DragItemFormProps> = ({
           )}
         />
         <Controller
-          name="componentType"
+          name="description"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="form-rhf-demo-component-type">
-                Component Type
+              <FieldLabel htmlFor="form-rhf-demo-description">
+                Description
               </FieldLabel>
               <Input
                 {...field}
-                id="form-rhf-demo-component-type"
+                id="form-rhf-demo-description"
                 aria-invalid={fieldState.invalid}
-                placeholder="Component Type"
-                autoComplete="off"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          name="type"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="form-rhf-demo-type">Type</FieldLabel>
-              <Input
-                {...field}
-                id="form-rhf-demo-type"
-                aria-invalid={fieldState.invalid}
-                placeholder="Type"
+                placeholder="Description"
                 autoComplete="off"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -120,7 +103,7 @@ export const CreateDragItemForm: React.FC<DragItemFormProps> = ({
         />
       </FieldGroup>
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? <Spinner /> : "Add Component"}
+        {isSubmitting ? <Spinner /> : "Create Application"}
       </Button>
     </form>
   )
