@@ -1,6 +1,6 @@
-import Application from "@/modules/dashboard/Application";
-import { Spinner } from "@repo/ui/components";
-import React, { Suspense } from "react";
+import Application from "@/modules/dashboard/Application"
+import { Spinner } from "@repo/ui/components"
+import { Suspense } from "react"
 
 function Page() {
   return (
@@ -13,7 +13,7 @@ function Page() {
     >
       <Application />
     </Suspense>
-  );
+  )
 }
 
-export default Page;
+export default Page

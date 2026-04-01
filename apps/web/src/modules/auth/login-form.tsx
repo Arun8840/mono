@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+"use client"
+import React from "react"
 import {
   Button,
   Field,
@@ -9,13 +9,13 @@ import {
   Input,
   Spinner,
   toast,
-} from "@repo/ui/components";
+} from "@repo/ui/components"
 
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import Link from "next/link";
-import { signIn } from "@repo/better-auth";
-import { loginSchema, LoginSchemaInput } from "@repo/validations";
+import { Controller, SubmitHandler, useForm } from "react-hook-form"
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema"
+import Link from "next/link"
+import { signIn } from "@repo/better-auth"
+import { loginSchema, LoginSchemaInput } from "@repo/validations"
 
 const LoginForm = () => {
   const form = useForm<LoginSchemaInput>({
@@ -24,23 +24,23 @@ const LoginForm = () => {
       password: "",
     },
     resolver: standardSchemaResolver(loginSchema),
-  });
+  })
 
-  const isSubmitting = form.formState.isSubmitting;
+  const isSubmitting = form.formState.isSubmitting
 
   const handleLogin: SubmitHandler<LoginSchemaInput> = async (data) => {
     const res = await signIn.email({
       email: data.email,
       password: data.password,
-      callbackURL: "/dashboard",
-    });
+      callbackURL: "/",
+    })
     if (res?.error) {
-      toast.error(res?.error?.message ?? "Something went wrong");
+      toast.error(res?.error?.message ?? "Something went wrong")
     }
     if (res.data) {
-      toast.success("Logged in successfully");
+      toast.success("Logged in successfully")
     }
-  };
+  }
   return (
     <div>
       <form
@@ -111,7 +111,7 @@ const LoginForm = () => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm
