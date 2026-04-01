@@ -42,6 +42,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const currentPath = usePathname();
+  console.log(currentPath);
   return (
     <Sidebar {...props} collapsible="icon">
       <SidebarContent>
@@ -52,9 +53,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {item.items.map((item) => {
+                    const isActive = item?.url === currentPath;
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
+                          isActive={isActive}
                           className="data-[active=true]:bg-primary/5"
                           render={
                             <Link
