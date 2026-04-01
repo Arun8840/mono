@@ -289,9 +289,15 @@ importers:
 
   packages/server:
     dependencies:
+      '@elysiajs/cors':
+        specifier: ^1.4.1
+        version: 1.4.1(elysia@1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3))
       '@elysiajs/eden':
         specifier: ^1.4.8
         version: 1.4.8(elysia@1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3))
+      '@nowarajs/elysia-ratelimit':
+        specifier: ^1.5.3
+        version: 1.5.3(@nowarajs/error@1.4.3)(@nowarajs/kv-store@1.4.2(@nowarajs/error@1.4.3))(elysia@1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3))
       '@repo/better-auth':
         specifier: workspace:*
         version: link:../better-auth
@@ -304,15 +310,24 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@repo/validations':
+        specifier: workspace:*
+        version: link:../validations
       '@sinclair/typebox':
         specifier: ^0.34.49
         version: 0.34.49
+      drizzle-orm:
+        specifier: ^0.45.1
+        version: 0.45.1(@neondatabase/serverless@1.0.2)(@opentelemetry/api@1.9.0)(@types/pg@8.20.0)(kysely@0.28.14)(pg@8.20.0)
       elysia:
         specifier: ^1.4.28
         version: 1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3)
       openapi-types:
         specifier: ^12.1.3
         version: 12.1.3
+      pg:
+        specifier: ^8.16.0
+        version: 8.20.0
 
   packages/tailwind-config:
     devDependencies:
@@ -348,6 +363,9 @@ importers:
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      nuqs:
+        specifier: ^2.8.9
+        version: 2.8.9(next@16.2.1(@opentelemetry/api@1.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
       react:
         specifier: ^19
         version: 19.2.4
@@ -573,6 +591,11 @@ packages:
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
+
+  '@elysiajs/cors@1.4.1':
+    resolution: {integrity: sha512-lQfad+F3r4mNwsxRKbXyJB8Jg43oAOXjRwn7sKUL6bcOW3KjUqUimTS+woNpO97efpzjtDE0tEjGk9DTw8lqTQ==}
+    peerDependencies:
+      elysia: '>= 1.4.0'
 
   '@elysiajs/eden@1.4.8':
     resolution: {integrity: sha512-a7oct2kFa49tH+GawZtSUCZR2rQgucNYgGLz8alXUqb4IrU3PASA0T4zXJw4MhdV1Xb6vyiR7p7kkqJcVjgbkA==}
@@ -1417,6 +1440,25 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
+  '@nowarajs/elysia-ratelimit@1.5.3':
+    resolution: {integrity: sha512-upCbNHcrE2Y8mgiqsZdZ/iE6TOqWcjuw6L12lttPzhDEPFIgE9S477xrRJPr5+Tl1Vi1DiBSyszNEccrSc88Mw==}
+    peerDependencies:
+      '@nowarajs/error': ^1.3.10
+      '@nowarajs/kv-store': ^1.3.0
+      elysia: ^1.4.19
+
+  '@nowarajs/error@1.4.3':
+    resolution: {integrity: sha512-KLtMLg8iT8Mf/brmQMGu7BCF12305G0vL2VB76oAsIQDR7URS52Kn+sgQOC9t4dsC34Zu8OZXDT9V7HWLKxNqw==}
+
+  '@nowarajs/kv-store@1.4.2':
+    resolution: {integrity: sha512-+1b/23S6FUt+l0Bs5DuJ3beYwqMOl8BsqbANl4XjbWk8o60aq3Gy11SOuKXoyiv88AwvMTn52pU8UHiq/3D+Iw==}
+    peerDependencies:
+      '@nowarajs/error': ^1.4.3
+      ioredis: ^5.9.1
+    peerDependenciesMeta:
+      ioredis:
+        optional: true
+
   '@opentelemetry/api@1.9.0':
     resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==}
     engines: {node: '>=8.0.0'}
@@ -1512,6 +1554,9 @@ packages:
 
   '@sinclair/typebox@0.34.49':
     resolution: {integrity: sha512-brySQQs7Jtn0joV8Xh9ZV/hZb9Ozb0pmazDIASBkYKCjXrXU3mpcFahmK/z4YDhGkQvP9mWJbVyahdtU5wQA+A==}
+
+  '@standard-schema/spec@1.0.0':
+    resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -3078,6 +3123,27 @@ packages:
   node-releases@2.0.36:
     resolution: {integrity: sha512-TdC8FSgHz8Mwtw9g5L4gR/Sh9XhSP/0DEkQxfEFXOpiul5IiHgHan2VhYYb6agDSfp4KuvltmGApc8HMgUrIkA==}
 
+  nuqs@2.8.9:
+    resolution: {integrity: sha512-8ou6AEwsxMWSYo2qkfZtYFVzngwbKmg4c00HVxC1fF6CEJv3Fwm6eoZmfVPALB+vw8Udo7KL5uy96PFcYe1BIQ==}
+    peerDependencies:
+      '@remix-run/react': '>=2'
+      '@tanstack/react-router': ^1
+      next: '>=14.2.0'
+      react: '>=18.2.0 || ^19.0.0-0'
+      react-router: ^5 || ^6 || ^7
+      react-router-dom: ^5 || ^6 || ^7
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      '@tanstack/react-router':
+        optional: true
+      next:
+        optional: true
+      react-router:
+        optional: true
+      react-router-dom:
+        optional: true
+
   object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
@@ -3843,6 +3909,10 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
+  '@elysiajs/cors@1.4.1(elysia@1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3))':
+    dependencies:
+      elysia: 1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3)
+
   '@elysiajs/eden@1.4.8(elysia@1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3))':
     dependencies:
       elysia: 1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3)
@@ -4387,6 +4457,18 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
+  '@nowarajs/elysia-ratelimit@1.5.3(@nowarajs/error@1.4.3)(@nowarajs/kv-store@1.4.2(@nowarajs/error@1.4.3))(elysia@1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3))':
+    dependencies:
+      '@nowarajs/error': 1.4.3
+      '@nowarajs/kv-store': 1.4.2(@nowarajs/error@1.4.3)
+      elysia: 1.4.28(@sinclair/typebox@0.34.49)(exact-mirror@0.2.7(@sinclair/typebox@0.34.49))(file-type@22.0.0)(openapi-types@12.1.3)(typescript@5.9.3)
+
+  '@nowarajs/error@1.4.3': {}
+
+  '@nowarajs/kv-store@1.4.2(@nowarajs/error@1.4.3)':
+    dependencies:
+      '@nowarajs/error': 1.4.3
+
   '@opentelemetry/api@1.9.0': {}
 
   '@opentelemetry/semantic-conventions@1.40.0': {}
@@ -4454,6 +4536,8 @@ snapshots:
   '@rtsao/scc@1.1.0': {}
 
   '@sinclair/typebox@0.34.49': {}
+
+  '@standard-schema/spec@1.0.0': {}
 
   '@standard-schema/spec@1.1.0': {}
 
@@ -6064,6 +6148,13 @@ snapshots:
       semver: 6.3.1
 
   node-releases@2.0.36: {}
+
+  nuqs@2.8.9(next@16.2.1(@opentelemetry/api@1.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4):
+    dependencies:
+      '@standard-schema/spec': 1.0.0
+      react: 19.2.4
+    optionalDependencies:
+      next: 16.2.1(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
 
   object-assign@4.1.1: {}
 

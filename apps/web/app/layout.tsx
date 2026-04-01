@@ -3,7 +3,7 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Geist, Figtree } from "next/font/google"
 import { ThemeProvider } from "@/modules/theme-provider"
-import { Toaster } from "@repo/ui/components"
+import { Toaster } from "@repo/ui/components/ui/sonner"
 import { QueryProviders } from "@/providers/Query-provider"
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" })
@@ -34,6 +34,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProviders>{children}</QueryProviders>
+
           <Toaster position="top-center" />
         </ThemeProvider>
       </body>

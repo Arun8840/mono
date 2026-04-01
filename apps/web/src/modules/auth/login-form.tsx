@@ -12,10 +12,10 @@ import {
 } from "@repo/ui/components";
 
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { loginSchema, LoginSchemaInput } from "@repo/validations/login.schema";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import Link from "next/link";
 import { signIn } from "@repo/better-auth";
+import { loginSchema, LoginSchemaInput } from "@repo/validations";
 
 const LoginForm = () => {
   const form = useForm<LoginSchemaInput>({
@@ -32,7 +32,7 @@ const LoginForm = () => {
     const res = await signIn.email({
       email: data.email,
       password: data.password,
-      callbackURL: "/",
+      callbackURL: "/dashboard",
     });
     if (res?.error) {
       toast.error(res?.error?.message ?? "Something went wrong");
