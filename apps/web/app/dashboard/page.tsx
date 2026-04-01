@@ -1,9 +1,19 @@
 import Application from "@/modules/dashboard/Application";
+import { Spinner } from "@repo/ui/components";
+import React, { Suspense } from "react";
 
-export default function Page() {
+function Page() {
   return (
-    <main className="flex flex-col items-center justify-between min-h-screen p-24 bg-black">
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center p-3">
+          <Spinner />
+        </div>
+      }
+    >
       <Application />
-    </main>
+    </Suspense>
   );
 }
+
+export default Page;

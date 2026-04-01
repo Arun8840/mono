@@ -1,8 +1,7 @@
 import Elysia from "elysia";
-import { authPlugin } from "../plugins/auth.plugin";
-import { dragPlugin } from "../plugins/drag.plugin";
 import { User } from "@repo/better-auth/server";
-import { dragItemCreateSchema } from "@repo/validations";
+import { dragItemCreationModel } from "../models/drag.model";
+import { authPlugin, dragPlugin } from "../plugins";
 
 const checkAuth = (user: User) => {
   if (!user) {
@@ -37,7 +36,7 @@ export const dragController = new Elysia()
         },
         {
           auth: true,
-          body: dragItemCreateSchema,
+          body: dragItemCreationModel,
         },
       ),
   );
