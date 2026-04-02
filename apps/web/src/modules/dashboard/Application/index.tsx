@@ -66,7 +66,8 @@ function Application() {
         description="Application is a collection of components that are used to build a page."
         event={
           <Button type="button" onClick={open}>
-            <HugeiconsIcon icon={AddCircleHalfDotFreeIcons} /> New Application
+            <HugeiconsIcon icon={AddCircleHalfDotFreeIcons} />
+            <span> New Application</span>
           </Button>
         }
       />

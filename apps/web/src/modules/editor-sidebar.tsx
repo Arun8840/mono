@@ -16,6 +16,7 @@ import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { HomeIcon, Eye, ArrowLeft } from "@hugeicons/core-free-icons"
+import ToolBar from "./dashboard/Application/pages/design/ui/toolbar"
 
 export function EditorSidebar({
   ...props
@@ -23,6 +24,7 @@ export function EditorSidebar({
   const params = useParams()
   const appId = params.appId
   const currentPath = usePathname()
+  const isPageDesign = currentPath?.includes("/page")
   const data = {
     navMain: [
       {
@@ -51,6 +53,8 @@ export function EditorSidebar({
       },
     ],
   }
+
+  if (isPageDesign) return <ToolBar />
 
   return (
     <Sidebar {...props} collapsible="icon">
