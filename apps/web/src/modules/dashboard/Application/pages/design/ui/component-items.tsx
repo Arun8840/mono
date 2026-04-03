@@ -56,7 +56,13 @@ const ComponentItems = () => {
     <Popover>
       <PopoverTrigger
         nativeButton={true}
-        render={<Button disabled={isPending} size="icon" />}
+        render={
+          <Button
+            className={"active:rotate-90 origin-center"}
+            disabled={isPending}
+            size="icon"
+          />
+        }
       >
         {isPending ? <Spinner /> : <HugeiconsIcon icon={Plus} />}
       </PopoverTrigger>
