@@ -131,21 +131,27 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
       value={{ dimensions, handleResize, onDataUpdate }}
     >
       <Draggable
-        id={value?.id!}
+        id={value?.id || ""}
         type="move"
         data={value as any}
         dragHandle={true}
-        className="h-full w-full"
+        style={gridStyle}
+        className="size-full"
       >
-        <div className="relative group/dropped-comp h-full w-full">
+        <div className="relative group/dropped-comp size-full">
           {isSelected && toolbar}
 
           <Resizable
             size={{
-              width: (value?.position?.w || 8) * dimensions.colWidth,
-              height: (value?.position?.h || 40) * dimensions.rowHeight,
+              width: "100%",
+              height: "100%",
             }}
-            grid={[dimensions.colWidth, dimensions.rowHeight]}
+            enable={{
+              right: isSelected,
+              bottom: isSelected,
+              left: isSelected,
+              top: isSelected,
+            }}
             onResizeStop={(e, dir, ref, d) => handleResize(d)}
             handleComponent={{
               bottomRight: isSelected ? (
@@ -175,6 +181,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
             }}
           >
             <div
+              tabIndex={-1}
               className={cn(
                 "h-full w-full p-0.5 bg-transparent border border-dashed border-muted",
                 isSelected

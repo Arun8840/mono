@@ -1,6 +1,6 @@
 "use client"
 import { DndProvider, Spinner } from "@repo/ui/components"
-import React, { RefObject, useEffect } from "react"
+import React, { useEffect } from "react"
 import ToolBar from "./ui/toolbar"
 import { useQuery } from "@tanstack/react-query"
 import { client } from "@repo/server/client"
@@ -55,7 +55,7 @@ function PageDesign({ appId, pageId }: PageDesignProps) {
     )
   return (
     <DndProvider onDragEnd={handleDragEnd} modifiers={[snapToGridModifier]}>
-      <div ref={canvasRef} className="size-full">
+      <div ref={canvasRef} className="size-full relative overflow-y-auto">
         <PageComponent />
       </div>
       <ToolBar />
