@@ -66,19 +66,33 @@ export function useDragHandlers({
       } else {
         const itemRect = active?.rect?.current?.translated
         if (!itemRect) return
-        const dropX = itemRect.left - canvasRect.left + scrollLeft
-        const dropY = itemRect.top - canvasRect.top + scrollTop
-        const currentW = dragData?.position?.w || 2
-        const currentH = dragData?.position?.h || 2
-        const gridX = clamp(Math.round(dropX / colWidth), 0, COLS - currentW)
-        const gridY = Math.max(0, Math.round(dropY / ROW_HEIGHT))
+        // EXISTING ITEM MOVE (The Accuracy Fix)
+        const originalPos = dragData?.position // { x, y, w, h }
+        if (!originalPos) return
+
+        /* CALCULATION: 
+         1. Convert the pixel delta (how far the mouse moved) into grid units.
+         2. Add that grid delta to the original starting X and Y.
+      */
+        const deltaGridX = Math.round(delta.x / colWidth)
+        const deltaGridY = Math.round(delta.y / ROW_HEIGHT)
+
+        const gridX = clamp(originalPos.x + deltaGridX, 0, COLS - originalPos.w)
+        const gridY = Math.max(0, originalPos.y + deltaGridY)
+
         const req = {
           applicationId: appId,
           pageId: pageId,
-          componentId: dragData?.id as string,
-          position: { x: gridX, y: gridY, w: currentW, h: currentH },
+          componentId: active.id as string,
+          position: {
+            x: gridX,
+            y: gridY,
+            w: originalPos.w,
+            h: originalPos.h,
+          },
         }
-        moveAppComponent(dragData?.id as string, req)
+
+        moveAppComponent(active.id as string, req)
         moveComponent.mutate(req)
       }
     },
