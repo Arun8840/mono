@@ -22,9 +22,9 @@ export interface PositionType {
 
 export interface PropertiesTypes {
   content: string
-  href?: string
-  src?: string
-  alt?: string
+  href: string
+  src: string
+  alt: string
 }
 export interface componentType {
   pageId: string
@@ -32,7 +32,7 @@ export interface componentType {
   type: string
   id?: string
   applicationId: string
-  styles?: CSSProperties
+  styles?: Partial<CSSProperties>
   position: PositionType
-  properties?: PropertiesTypes
+  properties?: Partial<PropertiesTypes>
 }

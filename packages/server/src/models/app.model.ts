@@ -46,6 +46,7 @@ export const componentCreationModel = t.Object({
     minLength: 1,
     error: "Application ID is required",
   }),
+  type: t.String({ minLength: 1, error: "Type is required" }),
   pageId: t.String({
     minLength: 1,
     error: "Page ID is required",

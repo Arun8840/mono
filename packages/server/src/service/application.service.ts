@@ -291,11 +291,11 @@ export const createApplicationService = () => {
         })
       }
       const request = {
-        name: newComponent.name as string,
-        type: newComponent.name as string,
+        name: newComponent.name,
+        type: newComponent.type,
         applicationId: newComponent.applicationId,
         pageId: newComponent.pageId,
-        styles: (newComponent.styles || {}) as ComponentStyle,
+        styles: newComponent.styles || {},
         position: (newComponent.position || {
           x: 0,
           y: 0,
@@ -331,7 +331,7 @@ export const createApplicationService = () => {
           },
         })
       }
-      const response = await db
+      const [response] = await db
         .delete(appComponentsSchemaTable)
         .where(
           and(
@@ -340,6 +340,7 @@ export const createApplicationService = () => {
             eq(appComponentsSchemaTable.applicationId, component.appId),
           ),
         )
+        .returning()
 
       if (!response) {
         throw new Error("Failed to delete component", {
