@@ -1,11 +1,11 @@
-import { ApplicationStore } from "@/types/app.type";
-import { create } from "zustand";
-import { initialAppState } from "./app.state";
+import { ApplicationStore } from "@/types/app.type"
+import { create } from "zustand"
+import { initialAppState } from "./app.state"
 
 export const useApplicationStore = create<ApplicationStore>((set) => ({
   ...initialAppState,
   getPage: (page) => {
-    set({ page });
+    set({ page })
   },
   addComponent: (component) => {
     set((state) => ({
@@ -13,7 +13,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
         ...state.page,
         components: [...state.page.components, component],
       },
-    }));
+    }))
   },
   updateComponent: (id, updates) => {
     set((state) => ({
@@ -23,7 +23,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
           comp.id === id ? { ...comp, ...updates } : comp,
         ),
       },
-    }));
+    }))
   },
   removeComponent: (id) => {
     set((state) => ({
@@ -31,7 +31,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
         ...state.page,
         components: state.page.components.filter((comp) => comp.id !== id),
       },
-    }));
+    }))
   },
   setComponents: (components) => {
     set((state) => ({
@@ -39,7 +39,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
         ...state.page,
         components,
       },
-    }));
+    }))
   },
   clearPage: () => {
     set((state) => ({
@@ -47,6 +47,10 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
         ...state.page,
         components: [],
       },
-    }));
+    }))
   },
-}));
+  setSelectedComponent: (id: string | null) =>
+    set(() => ({
+      selectedComponentId: id,
+    })),
+}))

@@ -1,14 +1,13 @@
 "use client"
-import { DndProvider, Spinner, toast } from "@repo/ui/components"
-import type { DragEndEvent } from "@repo/ui/components"
-import React, { useEffect } from "react"
+import { DndProvider, Spinner } from "@repo/ui/components"
+import React, { RefObject, useEffect } from "react"
 import ToolBar from "./ui/toolbar"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { client } from "@repo/server/client"
 import { useApplicationStore } from "@/store/app"
 import { PageTypes } from "@/types/app.type"
 import PageComponent from "./ui/Page-ui"
-import { componentType, DragItems } from "@/types/global"
+import { useCanvasDimensions, useDragHandlers } from "@/hooks"
 
 type PageDesignProps = {
   appId: string
@@ -16,17 +15,16 @@ type PageDesignProps = {
 }
 function PageDesign({ appId, pageId }: PageDesignProps) {
   const getPage = useApplicationStore((state) => state?.getPage)
-  const createComponent = useMutation({
-    mutationFn: async (request: componentType) => {
-      return client.app.pages.component.page.component.create.post(request)
-    },
-    onSuccess(data) {
-      toast.success("Component created successfully")
-    },
-    onError(error) {
-      toast.error(error.message)
-    },
+
+  //* HOOKS
+  const { canvasRef, snapToGridModifier, colWidth } = useCanvasDimensions()
+  const { handleDragEnd } = useDragHandlers({
+    appId,
+    pageId,
+    canvasRef,
+    colWidth,
   })
+
   const { data, isPending, isError } = useQuery({
     queryKey: ["page", appId, pageId],
     queryFn: async () => {
@@ -40,7 +38,6 @@ function PageDesign({ appId, pageId }: PageDesignProps) {
     },
     enabled: !!appId && !!pageId,
   })
-
   const pageItems = data?.data
 
   useEffect(() => {
@@ -48,34 +45,6 @@ function PageDesign({ appId, pageId }: PageDesignProps) {
       getPage?.(pageItems as PageTypes)
     }
   }, [data])
-
-  const handleDrop = (event: DragEndEvent) => {
-    const { active, delta, activatorEvent, over } = event
-    if (!active || !over) return
-
-    const draggedData = active.data.current as DragItems
-
-    const request = {
-      applicationId: appId,
-      name: draggedData.name,
-      pageId: pageId,
-      position: {
-        x: delta.x,
-        y: delta.y,
-        w: 100,
-        h: 100,
-      },
-      properties: {
-        content: "",
-        href: "",
-        src: "",
-        alt: "",
-      },
-    } as componentType
-
-    createComponent.mutate(request)
-    console.log(draggedData, over.data.current)
-  }
 
   if (isPending) return <Spinner />
   if (isError)
@@ -85,8 +54,10 @@ function PageDesign({ appId, pageId }: PageDesignProps) {
       </div>
     )
   return (
-    <DndProvider onDragEnd={handleDrop}>
-      <PageComponent />
+    <DndProvider onDragEnd={handleDragEnd} modifiers={[snapToGridModifier]}>
+      <div ref={canvasRef} className="size-full">
+        <PageComponent />
+      </div>
       <ToolBar />
     </DndProvider>
   )
