@@ -53,4 +53,14 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
     set(() => ({
       selectedComponentId: id,
     })),
+  moveComponent: (id, updates) => {
+    set((state) => ({
+      page: {
+        ...state.page,
+        components: state.page.components.map((comp) =>
+          comp.id === id ? { ...comp, position: updates.position } : comp,
+        ),
+      },
+    }))
+  },
 }))

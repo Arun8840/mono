@@ -3,12 +3,18 @@
 import { useMutation } from "@tanstack/react-query"
 import { client } from "@repo/server/client"
 import { toast } from "@repo/ui/components"
-import { componentType } from "@/types/global"
+import { componentType, MoveComponentRequest } from "@/types/global"
 
 export function useEditorMutations() {
   const addComponent = useMutation({
     mutationFn: async (request: componentType) => {
-      return client.app.pages.component.page.component.create.post(request)
+      return client.app.pages.component.page.component.create.post({
+        ...request,
+        properties: {
+          ...request.properties,
+          content: "",
+        },
+      })
     },
     onSuccess: (res) => {
       if (res.data?.message) {
@@ -21,10 +27,32 @@ export function useEditorMutations() {
   })
 
   const updateComponent = useMutation({
-    mutationFn: async (component: any) => {
-      return client.app.pages.component.page.component.update.post(component)
+    mutationFn: async (component: componentType) => {
+      const req = {
+        ...component,
+        id: component?.id as string,
+      }
+      return client.app.pages.component.page.component.update.post(req)
     },
-    onSuccess: () => {},
+    onSuccess: (res) => {
+      if (res.data?.message) {
+        toast.success(res.data.message)
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
+  const moveComponent = useMutation({
+    mutationFn: async (component: MoveComponentRequest) => {
+      return client.app.pages.component.page.component.move.post(component)
+    },
+    onSuccess: (res) => {
+      if (res.data?.message) {
+        toast.success(res.data.message)
+      }
+    },
     onError: (error) => {
       toast.error(error.message)
     },
@@ -33,5 +61,6 @@ export function useEditorMutations() {
   return {
     addComponent,
     updateComponent,
+    moveComponent,
   }
 }

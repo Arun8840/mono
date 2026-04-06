@@ -1,11 +1,10 @@
 "use client"
 
 import { useCallback } from "react"
-import { resolveCollisions } from "@/lib/layout-utils"
 import { useApplicationStore } from "@/store/app"
 import { useEditorMutations } from "./useEditorMutations"
 import { clamp, COLS, ROW_HEIGHT } from "@/lib/editor-utils"
-import { componentType, DragItems } from "@/types/global"
+import { componentType } from "@/types/global"
 import { DragEndEvent } from "@repo/ui/components"
 
 interface UseDragHandlersProps {
@@ -21,10 +20,10 @@ export function useDragHandlers({
   canvasRef,
   colWidth,
 }: UseDragHandlersProps) {
-  const { addComponent, updateComponent } = useEditorMutations()
+  const { addComponent, moveComponent } = useEditorMutations()
   const applicationData = useApplicationStore((state) => state.page)
   const addAppComp = useApplicationStore((state) => state.addComponent)
-  const updateAppComps = useApplicationStore((state) => state.updateComponent)
+  const moveAppComponent = useApplicationStore((state) => state.moveComponent)
 
   const handleDragEnd = useCallback(
     async (event: DragEndEvent) => {
@@ -67,33 +66,20 @@ export function useDragHandlers({
       } else {
         const itemRect = active?.rect?.current?.translated
         if (!itemRect) return
-
         const dropX = itemRect.left - canvasRect.left + scrollLeft
         const dropY = itemRect.top - canvasRect.top + scrollTop
-
         const currentW = dragData?.position?.w || 2
         const currentH = dragData?.position?.h || 2
-
         const gridX = clamp(Math.round(dropX / colWidth), 0, COLS - currentW)
         const gridY = Math.max(0, Math.round(dropY / ROW_HEIGHT))
-
-        const updatedComp = {
-          id: dragData?.id || "",
+        const req = {
           applicationId: appId,
-          pageId,
-          name: dragData?.type || "",
-          type: dragData?.type || "",
+          pageId: pageId,
+          componentId: dragData?.id as string,
           position: { x: gridX, y: gridY, w: currentW, h: currentH },
-          properties: {
-            content: "",
-          },
-          styles: dragData?.styles,
-        } as componentType
-
-        updateAppComps?.(dragData?.id || "", updatedComp)
-        updateComponent.mutate(
-          updatedComp as Parameters<typeof updateComponent.mutate>[0],
-        )
+        }
+        moveAppComponent(dragData?.id as string, req)
+        moveComponent.mutate(req)
       }
     },
     [
@@ -104,8 +90,8 @@ export function useDragHandlers({
       applicationData,
       addAppComp,
       addComponent,
-      updateAppComps,
-      updateComponent,
+      moveAppComponent,
+      moveComponent,
     ],
   )
 
