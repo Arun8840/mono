@@ -1,16 +1,18 @@
-import { useDraggable } from "@dnd-kit/core";
-import { cn } from "@repo/ui/lib/utils";
-import React, { ComponentType } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { GripVertical } from "@hugeicons/core-free-icons";
+import { useDraggable } from "@dnd-kit/core"
+import { cn } from "@repo/ui/lib/utils"
+import React, { ComponentType } from "react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { GripVertical, Trash } from "@hugeicons/core-free-icons"
+import { Button } from "../button"
 interface DraggableProps {
-  id: string;
-  children: React.ReactNode;
-  className?: string;
-  type: string;
-  data?: ComponentType | Record<string, unknown>;
-  dragHandle?: boolean;
-  style?: React.CSSProperties;
+  id: string
+  children: React.ReactNode
+  className?: string
+  type: string
+  data?: ComponentType | Record<string, unknown>
+  dragHandle?: boolean
+  style?: React.CSSProperties
+  onDelete?: () => void
 }
 
 const Draggable: React.FC<DraggableProps> = ({
@@ -21,12 +23,13 @@ const Draggable: React.FC<DraggableProps> = ({
   data,
   dragHandle = false,
   style: customStyle,
+  onDelete,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id,
       data: { ...data, accept: type },
-    });
+    })
 
   const style: React.CSSProperties = {
     ...customStyle,
@@ -38,26 +41,59 @@ const Draggable: React.FC<DraggableProps> = ({
     transition: isDragging ? "none" : "none",
     touchAction: "none",
     cursor: isDragging ? "grabbing" : "grab",
-  };
+  }
 
   if (dragHandle) {
     return (
       <div
         id={id}
         ref={setNodeRef}
-        className={cn("relative group", className)}
+        // Added a slight ring on hover to define the boundary of the element being edited
+        className={cn(
+          "relative group transition-all duration-200 hover:ring-2 hover:ring-primary/50",
+          className,
+        )}
         style={style}
       >
+        {/* Unified Toolbar */}
         <div
-          {...listeners}
-          {...attributes}
-          className="absolute -top-3 -left-3 z-50 cursor-grab bg-background border border-input rounded-md shadow-sm p-1 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-accent hover:text-accent-foreground active:cursor-grabbing active:scale-95"
+          className="absolute -top-4 left-0 flex items-center gap-1 z-50 px-1 py-1 
+                      bg-background border border-border rounded-lg shadow-lg 
+                      opacity-0 group-hover:opacity-100 group-hover:-top-9 
+                      transition-all duration-200 pointer-events-auto"
         >
-          <HugeiconsIcon icon={GripVertical} className="size-4" />
+          {/* Drag Handle */}
+          <Button
+            {...listeners}
+            {...attributes}
+            size={"icon"}
+            variant={"ghost"}
+            className={"rounded-md"}
+          >
+            <HugeiconsIcon icon={GripVertical} className="size-4" />
+          </Button>
+
+          {/* Separator */}
+          <div className="w-px h-4 bg-border mx-0.5" />
+
+          {/* Delete Button */}
+          <Button
+            onClick={(e) => {
+              e.stopPropagation()
+              onDelete?.()
+            }}
+            size={"icon"}
+            variant={"destructive"}
+            className={"rounded-md"}
+          >
+            <HugeiconsIcon icon={Trash} className="size-4" />
+          </Button>
         </div>
-        {children}
+
+        {/* The Actual Content */}
+        <div className="relative z-10 size-full">{children}</div>
       </div>
-    );
+    )
   }
   return (
     <div
@@ -73,7 +109,7 @@ const Draggable: React.FC<DraggableProps> = ({
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
-export default Draggable;
+export default Draggable

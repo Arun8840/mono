@@ -9,11 +9,12 @@ import { componentType } from "@/types/global"
 import ResizeHandle from "@repo/ui/components/ui/dnd/resize-handler"
 import { cn } from "@repo/ui/lib/utils"
 import { ComponentWrapperProps } from "@/types/comp.wrapper.types"
+import { client } from "@repo/server/client"
 
 interface ComponentContextType {
   dimensions: { colWidth: number; rowHeight: number }
   handleResize: (delta: { width: number; height: number }) => void
-  onDataUpdate: (data: any) => void
+  onDataUpdate?: (data: any) => void
 }
 
 const ComponentContext = createContext<ComponentContextType | null>(null)
@@ -43,27 +44,31 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
   const selectedComponent = useApplicationStore(
     (state) => state.selectedComponentId,
   )
-  const setSelectedComponent = useApplicationStore(
-    (state) => state.setSelectedComponent,
-  )
+  const req = {
+    appId: value?.applicationId as string,
+    componentId: value?.id as string,
+    pageId: value?.pageId as string,
+  }
 
-  const updateAppComponents = useApplicationStore(
-    (state) => state?.updateComponent,
-  )
-
-  const updateComponentApi = useMutation({
-    mutationFn: async (data: componentType) => {
-      // const response = await api.app.update.component.post(data)
-      // return response.data
+  const removeMutate = useMutation({
+    mutationFn: async () => {
+      await client.app.pages.component.page.component.remove.post(req)
+    },
+    onSuccess: () => {
+      deleteComponent(value?.id || "")
     },
   })
+  const deleteComponent = useApplicationStore((state) => state.removeComponent)
 
   const isSelected = selectedComponent === value?.id
 
+  // ! remove component
+  const handleRemove = () => {
+    removeMutate?.mutate()
+  }
+  // ! resize component
   const handleResize = (delta: { width: number; height: number }) => {
     const COLS = 120
-    // Calculate new width and height in grid units, minimum of 1
-    // Clamp width to remaining columns in the row
     const newW = Math.round(
       Math.max(
         1,
@@ -82,28 +87,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
       ),
     )
 
-    const updatedComp = {
-      ...value,
-      position: {
-        ...value?.position,
-        w: newW,
-        h: newH,
-      },
-    } as componentType
-
-    // Resolve collisions
-
-    // Update store (bulk)
-    // updateAppComponents?.(updatedComp)
-    // updateComponentApi.mutate(updatedComp)
-  }
-
-  const onDataUpdate = (data: any) => {
-    const updatedComp = {
-      ...value,
-      ...data, // This allows updating any field, or specifically 'data' if that's what's intended
-    }
-    // updateAppComponent?.(updatedComp)
+    console.log(newW, newH)
   }
 
   const gridStyle: CSSProperties = {
@@ -112,7 +96,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
     zIndex: isSelected ? 40 : 10,
   }
 
-  // Render for Preview Mode
+  //* Render for Preview Mode
   if (isPreview) {
     // Mobile responsive mode: no grid positioning, flows in parent flex column
     // if (value.isResponsive) {
@@ -127,9 +111,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
   }
 
   return (
-    <ComponentContext.Provider
-      value={{ dimensions, handleResize, onDataUpdate }}
-    >
+    <ComponentContext.Provider value={{ dimensions, handleResize }}>
       <Draggable
         id={value?.id || ""}
         type="move"
@@ -137,6 +119,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
         dragHandle={true}
         style={gridStyle}
         className="size-full"
+        onDelete={handleRemove}
       >
         <div className="relative group/dropped-comp size-full">
           {isSelected && toolbar}
@@ -183,7 +166,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
             <div
               tabIndex={-1}
               className={cn(
-                "h-full w-full p-0.5 bg-transparent border border-dashed border-muted",
+                "size-full p-0.5 bg-transparent border border-dashed border-muted",
                 isSelected
                   ? "border-dashed border-blue-500"
                   : "border border-dashed hover:border-blue-500",

@@ -1,18 +1,4 @@
 import { CSSProperties } from "react"
-
-export interface DragItems {
-  accept?: string
-  label?: string
-  id?: string
-  name?: string
-  type?: string
-  position?: { w: number; h: number }
-  options?: { content?: string }
-  style?: Record<string, string | number>
-  assetId?: string
-  componentType?: string
-}
-
 export interface PositionType {
   x: number
   y: number
@@ -35,6 +21,12 @@ export interface componentType {
   styles?: Partial<CSSProperties>
   position: PositionType
   properties?: Partial<PropertiesTypes>
+}
+
+export interface DragItemTypes extends componentType {
+  id: string
+  componentType: string
+  accept: string
 }
 
 export interface MoveComponentRequest {

@@ -4,7 +4,7 @@ import { useCallback } from "react"
 import { useApplicationStore } from "@/store/app"
 import { useEditorMutations } from "./useEditorMutations"
 import { clamp, COLS, ROW_HEIGHT } from "@/lib/editor-utils"
-import { componentType } from "@/types/global"
+import { componentType, DragItemTypes } from "@/types/global"
 import { DragEndEvent } from "@repo/ui/components"
 
 interface UseDragHandlersProps {
@@ -35,7 +35,7 @@ export function useDragHandlers({
       const scrollLeft = canvas.scrollLeft
       const scrollTop = canvas.scrollTop
 
-      const dragData = active.data.current
+      const dragData = active.data.current as DragItemTypes
       const isNewItem = dragData?.accept !== "move"
 
       if (isNewItem) {
@@ -55,7 +55,7 @@ export function useDragHandlers({
           pageId,
           name: dragData?.name || "",
           type: dragData?.componentType || "",
-          position: { x: gridX, y: gridY, w: 8, h: 30 },
+          position: { x: gridX, y: gridY, w: 14, h: 30 },
           properties: {
             content: "Heading",
           },
@@ -66,14 +66,9 @@ export function useDragHandlers({
       } else {
         const itemRect = active?.rect?.current?.translated
         if (!itemRect) return
-        // EXISTING ITEM MOVE (The Accuracy Fix)
-        const originalPos = dragData?.position // { x, y, w, h }
+        const originalPos = dragData?.position
         if (!originalPos) return
 
-        /* CALCULATION: 
-         1. Convert the pixel delta (how far the mouse moved) into grid units.
-         2. Add that grid delta to the original starting X and Y.
-      */
         const deltaGridX = Math.round(delta.x / colWidth)
         const deltaGridY = Math.round(delta.y / ROW_HEIGHT)
 
