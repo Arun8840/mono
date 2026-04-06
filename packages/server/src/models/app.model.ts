@@ -62,7 +62,7 @@ export const componentCreationModel = t.Object({
   ),
   properties: t.Optional(
     t.Object({
-      content: t.String(),
+      content: t.Optional(t.String()),
       href: t.Optional(t.String()),
       src: t.Optional(t.String()),
       alt: t.Optional(t.String()),
@@ -98,7 +98,7 @@ export const componentUpdateModel = t.Object({
   ),
   properties: t.Optional(
     t.Object({
-      content: t.String(),
+      content: t.Optional(t.String()),
       href: t.Optional(t.String()),
       src: t.Optional(t.String()),
       alt: t.Optional(t.String()),
@@ -108,7 +108,7 @@ export const componentUpdateModel = t.Object({
 
 export const componentMoveModel = t.Object({
   componentId: t.String({ minLength: 1, error: "Component ID is required" }),
-  appId: t.String({
+  applicationId: t.String({
     minLength: 1,
     error: "Application ID is required",
   }),

@@ -400,7 +400,11 @@ export const createApplicationService = () => {
       }
     },
     movePageComponent: async (component: ComponentMoveModel) => {
-      if (!component?.componentId || !component?.pageId || !component?.appId) {
+      if (
+        !component?.componentId ||
+        !component?.pageId ||
+        !component?.applicationId
+      ) {
         throw new Error("Invalid component data", {
           cause: {
             status: 400,
@@ -408,7 +412,7 @@ export const createApplicationService = () => {
           },
         })
       }
-      const response = await db
+      const [response] = await db
         .update(appComponentsSchemaTable)
         .set({
           position: component.position,
@@ -417,9 +421,10 @@ export const createApplicationService = () => {
           and(
             eq(appComponentsSchemaTable.id, component.componentId),
             eq(appComponentsSchemaTable.pageId, component.pageId),
-            eq(appComponentsSchemaTable.applicationId, component.appId),
+            eq(appComponentsSchemaTable.applicationId, component.applicationId),
           ),
         )
+        .returning()
 
       if (!response) {
         throw new Error("Failed to move component", {

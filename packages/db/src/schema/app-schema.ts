@@ -25,7 +25,7 @@ export type PositionType = {
 }
 
 export type PropertiesTypes = {
-  content: string
+  content?: string | null
   href?: string | null
   src?: string | null
   alt?: string | null

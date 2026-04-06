@@ -36,3 +36,10 @@ export interface componentType {
   position: PositionType
   properties?: Partial<PropertiesTypes>
 }
+
+export interface MoveComponentRequest {
+  applicationId: string
+  pageId: string
+  componentId: string
+  position: PositionType
+}
