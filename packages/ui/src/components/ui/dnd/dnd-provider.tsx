@@ -6,8 +6,9 @@ import {
   useSensor,
   useSensors,
   type Modifier,
+  KeyboardSensor,
 } from "@dnd-kit/core"
-
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable"
 export type { DragEndEvent, Modifier }
 
 interface DndProviderProps {
@@ -20,6 +21,9 @@ function DndProvider({ children, onDragEnd, modifiers }: DndProviderProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 30 },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
     }),
   )
 

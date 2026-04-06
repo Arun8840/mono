@@ -1,15 +1,16 @@
-import { useDraggable } from "@dnd-kit/core"
-import { cn } from "@repo/ui/lib/utils"
-import React, { ComponentType } from "react"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { GripVertical } from "@hugeicons/core-free-icons"
+import { useDraggable } from "@dnd-kit/core";
+import { cn } from "@repo/ui/lib/utils";
+import React, { ComponentType } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { GripVertical } from "@hugeicons/core-free-icons";
 interface DraggableProps {
-  id: string
-  children: React.ReactNode
-  className?: string
-  type: string
-  data?: ComponentType | Record<string, unknown>
-  dragHandle?: boolean
+  id: string;
+  children: React.ReactNode;
+  className?: string;
+  type: string;
+  data?: ComponentType | Record<string, unknown>;
+  dragHandle?: boolean;
+  style?: React.CSSProperties;
 }
 
 const Draggable: React.FC<DraggableProps> = ({
@@ -19,14 +20,16 @@ const Draggable: React.FC<DraggableProps> = ({
   type,
   data,
   dragHandle = false,
+  style: customStyle,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id,
       data: { ...data, accept: type },
-    })
+    });
 
-  const style = {
+  const style: React.CSSProperties = {
+    ...customStyle,
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
@@ -35,7 +38,7 @@ const Draggable: React.FC<DraggableProps> = ({
     transition: isDragging ? "none" : "none",
     touchAction: "none",
     cursor: isDragging ? "grabbing" : "grab",
-  }
+  };
 
   if (dragHandle) {
     return (
@@ -54,7 +57,7 @@ const Draggable: React.FC<DraggableProps> = ({
         </div>
         {children}
       </div>
-    )
+    );
   }
   return (
     <div
@@ -70,7 +73,7 @@ const Draggable: React.FC<DraggableProps> = ({
     >
       {children}
     </div>
-  )
-}
+  );
+};
 
-export default Draggable
+export default Draggable;
