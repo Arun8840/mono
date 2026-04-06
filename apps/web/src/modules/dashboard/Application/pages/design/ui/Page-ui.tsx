@@ -43,11 +43,13 @@ function PageComponent() {
       >
         <div
           style={{
-            gridTemplateColumns: `repeat(120, 1fr)`, // 120 equal columns for high accuracy
-            gridAutoRows: `${dimensions.rowHeight}px`, // Matches your ROW_HEIGHT
-            ...(page?.styles?.background && {
-              background: page?.styles?.background,
-            }),
+            display: "grid",
+            gridTemplateColumns: `repeat(120, 1fr)`,
+            gridAutoRows: `${dimensions.rowHeight}px`,
+            gap: 0, // CRITICAL: Gaps break the math unless accounted for
+            padding: 0, // Better to use margin on children or a wrapper
+            position: "relative",
+            backgroundColor: page?.styles?.backgroundColor,
           }}
           className="size-full grid relative"
         >
