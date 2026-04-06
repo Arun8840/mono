@@ -1,14 +1,15 @@
 import { useDraggable } from "@dnd-kit/core"
-import { CSS } from "@dnd-kit/utilities"
 import { cn } from "@repo/ui/lib/utils"
-import React from "react"
-
+import React, { ComponentType } from "react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { GripVertical } from "@hugeicons/core-free-icons"
 interface DraggableProps {
   id: string
   children: React.ReactNode
   className?: string
   type: string
-  data?: Record<string, unknown>
+  data?: ComponentType | Record<string, unknown>
+  dragHandle?: boolean
 }
 
 const Draggable: React.FC<DraggableProps> = ({
@@ -17,6 +18,7 @@ const Draggable: React.FC<DraggableProps> = ({
   className,
   type,
   data,
+  dragHandle = false,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -35,6 +37,25 @@ const Draggable: React.FC<DraggableProps> = ({
     cursor: isDragging ? "grabbing" : "grab",
   }
 
+  if (dragHandle) {
+    return (
+      <div
+        id={id}
+        ref={setNodeRef}
+        className={cn("relative group", className)}
+        style={style}
+      >
+        <div
+          {...listeners}
+          {...attributes}
+          className="absolute -top-3 -left-3 z-50 cursor-grab bg-background border border-input rounded-md shadow-sm p-1 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-accent hover:text-accent-foreground active:cursor-grabbing active:scale-95"
+        >
+          <HugeiconsIcon icon={GripVertical} className="size-4" />
+        </div>
+        {children}
+      </div>
+    )
+  }
   return (
     <div
       ref={setNodeRef}

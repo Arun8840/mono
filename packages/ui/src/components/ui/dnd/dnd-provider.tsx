@@ -5,16 +5,18 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  type Modifier,
 } from "@dnd-kit/core"
 
-export type { DragEndEvent }
+export type { DragEndEvent, Modifier }
 
 interface DndProviderProps {
   children: React.ReactNode
   onDragEnd: (event: DragEndEvent) => void
+  modifiers?: Modifier[]
 }
 
-function DndProvider({ children, onDragEnd }: DndProviderProps) {
+function DndProvider({ children, onDragEnd, modifiers }: DndProviderProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 30 },
@@ -22,7 +24,7 @@ function DndProvider({ children, onDragEnd }: DndProviderProps) {
   )
 
   return (
-    <DndContext onDragEnd={onDragEnd} sensors={sensors}>
+    <DndContext onDragEnd={onDragEnd} sensors={sensors} modifiers={modifiers}>
       {children}
     </DndContext>
   )
