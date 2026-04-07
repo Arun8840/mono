@@ -323,7 +323,11 @@ export const createApplicationService = () => {
       }
     },
     removePageComponent: async (component: ComponentRemoveModel) => {
-      if (!component?.componentId || !component?.pageId || !component?.appId) {
+      if (
+        !component?.componentId ||
+        !component?.pageId ||
+        !component?.applicationId
+      ) {
         throw new Error("Invalid component data", {
           cause: {
             status: 400,
@@ -337,7 +341,7 @@ export const createApplicationService = () => {
           and(
             eq(appComponentsSchemaTable.id, component.componentId),
             eq(appComponentsSchemaTable.pageId, component.pageId),
-            eq(appComponentsSchemaTable.applicationId, component.appId),
+            eq(appComponentsSchemaTable.applicationId, component.applicationId),
           ),
         )
         .returning()
@@ -369,13 +373,13 @@ export const createApplicationService = () => {
           },
         })
       }
-      const response = await db
+      const [response] = await db
         .update(appComponentsSchemaTable)
         .set({
           name: component.name,
           type: component.name,
           styles: component.styles,
-          // position: component.position,
+          position: component.position,
           properties: component.properties,
         })
         .where(
@@ -385,6 +389,7 @@ export const createApplicationService = () => {
             eq(appComponentsSchemaTable.applicationId, component.applicationId),
           ),
         )
+        .returning()
 
       if (!response) {
         throw new Error("Failed to update component", {

@@ -71,7 +71,10 @@ export const componentCreationModel = t.Object({
 })
 
 export const componentRemoveModel = t.Object({
-  appId: t.String({ minLength: 1, error: "Application ID is required" }),
+  applicationId: t.String({
+    minLength: 1,
+    error: "Application ID is required",
+  }),
   pageId: t.String({ minLength: 1, error: "Page ID is required" }),
   componentId: t.String({ minLength: 1, error: "Component ID is required" }),
 })

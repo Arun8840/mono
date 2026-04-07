@@ -1,5 +1,5 @@
 import { CSSProperties } from "react"
-import { componentType, MoveComponentRequest } from "./global"
+import { componentType, MoveComponentRequest, PositionType } from "./global"
 
 export interface PageTypes {
   id: string
@@ -20,7 +20,8 @@ export interface ApplicationStore {
   selectedComponentId: string | null
   getPage: (page: PageTypes) => void
   addComponent: (component: componentType) => void
-  updateComponent: (id: string, updates: Partial<componentType>) => void
+  updateComponent: (updates: componentType) => void
+  resizeComponent: (id: string, updates: PositionType) => void
   moveComponent: (id: string, updates: MoveComponentRequest) => void
   removeComponent: (id: string) => void
   setComponents: (components: componentType[]) => void

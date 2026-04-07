@@ -16,7 +16,7 @@ export interface componentType {
   pageId: string
   name: string
   type: string
-  id?: string
+  id: string
   applicationId: string
   styles?: Partial<CSSProperties>
   position: PositionType
