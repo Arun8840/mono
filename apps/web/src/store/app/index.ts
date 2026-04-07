@@ -15,12 +15,27 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
       },
     }))
   },
-  updateComponent: (id, updates) => {
+  updateComponent: (updates) => {
     set((state) => ({
       page: {
         ...state.page,
         components: state.page.components.map((comp) =>
-          comp.id === id ? { ...comp, ...updates } : comp,
+          comp.id === updates.id ? { ...comp, ...updates } : comp,
+        ),
+      },
+    }))
+  },
+  resizeComponent: (id, updates) => {
+    set((state) => ({
+      page: {
+        ...state.page,
+        components: state.page.components.map((comp) =>
+          comp.id === id
+            ? {
+                ...comp,
+                position: updates,
+              }
+            : comp,
         ),
       },
     }))

@@ -5,11 +5,11 @@ import { Resizable } from "re-resizable"
 import { useMutation } from "@tanstack/react-query"
 import { Draggable } from "@repo/ui/components"
 import { useApplicationStore } from "@/store/app"
-import { componentType } from "@/types/global"
 import ResizeHandle from "@repo/ui/components/ui/dnd/resize-handler"
 import { cn } from "@repo/ui/lib/utils"
 import { ComponentWrapperProps } from "@/types/comp.wrapper.types"
 import { client } from "@repo/server/client"
+import { componentType } from "@/types/global"
 
 interface ComponentContextType {
   dimensions: { colWidth: number; rowHeight: number }
@@ -44,24 +44,38 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
   const selectedComponent = useApplicationStore(
     (state) => state.selectedComponentId,
   )
-  const req = {
-    appId: value?.applicationId as string,
+  const deleteComponent = useApplicationStore((state) => state.removeComponent)
+  const resizeComponent = useApplicationStore((state) => state.resizeComponent)
+  const setSelectedComponent = useApplicationStore(
+    (state) => state.setSelectedComponent,
+  )
+
+  const removeReq = {
+    applicationId: value?.applicationId as string,
     componentId: value?.id as string,
     pageId: value?.pageId as string,
   }
 
   const removeMutate = useMutation({
     mutationFn: async () => {
-      await client.app.pages.component.page.component.remove.post(req)
+      await client.app.pages.component.page.component.remove.post(removeReq)
     },
     onSuccess: () => {
       deleteComponent(value?.id || "")
     },
   })
-  const deleteComponent = useApplicationStore((state) => state.removeComponent)
+  const updateMutate = useMutation({
+    mutationFn: async (req: componentType) => {
+      return await client.app.pages.component.page.component.update.post(req)
+    },
+  })
 
   const isSelected = selectedComponent === value?.id
 
+  // ? modify component
+  const handleSelectComponent = () => {
+    setSelectedComponent?.(value?.id || "")
+  }
   // ! remove component
   const handleRemove = () => {
     removeMutate?.mutate()
@@ -87,7 +101,20 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
       ),
     )
 
-    console.log(newW, newH)
+    const request = {
+      applicationId: value?.applicationId as string,
+      id: value?.id as string,
+      name: value?.name as string,
+      pageId: value?.pageId as string,
+      position: {
+        ...value?.position,
+        w: newW,
+        h: newH,
+      },
+    } as componentType
+
+    resizeComponent?.(value?.id || "", request.position)
+    updateMutate?.mutate(request)
   }
 
   const gridStyle: CSSProperties = {
@@ -120,6 +147,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
         style={gridStyle}
         className="size-full"
         onDelete={handleRemove}
+        onModify={handleSelectComponent}
       >
         <div className="relative group/dropped-comp size-full">
           {isSelected && toolbar}
@@ -130,54 +158,46 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
               height: "100%",
             }}
             enable={{
-              right: isSelected,
-              bottom: isSelected,
-              left: isSelected,
-              top: isSelected,
+              right: true,
+              bottom: true,
+              left: true,
+              top: true,
+              topRight: true,
+              topLeft: true,
+              bottomLeft: true,
+              bottomRight: true,
             }}
             onResizeStop={(e, dir, ref, d) => handleResize(d)}
             handleComponent={{
-              bottomRight: isSelected ? (
-                <ResizeHandle
-                  direction="bottomRight"
-                  className="bg-blue-500 border-blue-500"
-                />
-              ) : undefined,
-              bottomLeft: isSelected ? (
-                <ResizeHandle
-                  direction="bottomLeft"
-                  className="bg-blue-500 border-blue-500"
-                />
-              ) : undefined,
-              topLeft: isSelected ? (
-                <ResizeHandle
-                  direction="topLeft"
-                  className="bg-blue-500 border-blue-500"
-                />
-              ) : undefined,
-              topRight: isSelected ? (
-                <ResizeHandle
-                  direction="topRight"
-                  className="bg-blue-500 border-blue-500"
-                />
-              ) : undefined,
+              top: <ResizeHandle direction="top" className="bg-primary" />,
+              bottom: (
+                <ResizeHandle direction="bottom" className="bg-primary" />
+              ),
+              left: <ResizeHandle direction="left" className="bg-primary" />,
+              right: <ResizeHandle direction="right" className="bg-primary" />,
+              topLeft: (
+                <ResizeHandle direction="topLeft" className="bg-primary" />
+              ),
+              topRight: (
+                <ResizeHandle direction="topRight" className="bg-primary" />
+              ),
+              bottomLeft: (
+                <ResizeHandle direction="bottomLeft" className="bg-primary" />
+              ),
+              bottomRight: (
+                <ResizeHandle direction="bottomRight" className="bg-primary" />
+              ),
             }}
           >
             <div
-              tabIndex={-1}
               className={cn(
-                "size-full p-0.5 bg-transparent border border-dashed border-muted",
+                "h-full w-full p-0.5 bg-transparent border border-dashed border-muted",
                 isSelected
                   ? "border-dashed border-blue-500"
                   : "border border-dashed hover:border-blue-500",
               )}
               onMouseDown={(e) => isSelected && e.stopPropagation()}
             >
-              {isSelected && (
-                <div className="absolute -top-6 left-0 bg-primary text-[10px] text-white px-2 py-0.5 rounded-t-sm font-bold uppercase tracking-wider pointer-events-none">
-                  {value.type}
-                </div>
-              )}
               {children}
             </div>
           </Resizable>
