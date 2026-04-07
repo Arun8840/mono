@@ -2,7 +2,7 @@ import { useDraggable } from "@dnd-kit/core"
 import { cn } from "@repo/ui/lib/utils"
 import React, { ComponentType } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { GripVertical, Trash } from "@hugeicons/core-free-icons"
+import { GripVertical, Trash, Edit } from "@hugeicons/core-free-icons"
 import { Button } from "../button"
 interface DraggableProps {
   id: string
@@ -13,6 +13,7 @@ interface DraggableProps {
   dragHandle?: boolean
   style?: React.CSSProperties
   onDelete?: () => void
+  onModify?: () => void
 }
 
 const Draggable: React.FC<DraggableProps> = ({
@@ -24,6 +25,7 @@ const Draggable: React.FC<DraggableProps> = ({
   dragHandle = false,
   style: customStyle,
   onDelete,
+  onModify,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -57,7 +59,7 @@ const Draggable: React.FC<DraggableProps> = ({
       >
         {/* Unified Toolbar */}
         <div
-          className="absolute -top-4 left-0 flex items-center gap-1 z-50 px-1 py-1 
+          className="absolute -top-4 right-0 flex items-center gap-1 z-50 px-1 py-1 
                       bg-background border border-border rounded-lg shadow-lg 
                       opacity-0 group-hover:opacity-100 group-hover:-top-9 
                       transition-all duration-200 pointer-events-auto"
@@ -66,7 +68,7 @@ const Draggable: React.FC<DraggableProps> = ({
           <Button
             {...listeners}
             {...attributes}
-            size={"icon"}
+            size={"icon-sm"}
             variant={"ghost"}
             className={"rounded-md"}
           >
@@ -75,14 +77,25 @@ const Draggable: React.FC<DraggableProps> = ({
 
           {/* Separator */}
           <div className="w-px h-4 bg-border mx-0.5" />
-
+          {/* Modify Button */}
+          <Button
+            onClick={(e) => {
+              e.stopPropagation()
+              onModify?.()
+            }}
+            size={"icon-sm"}
+            variant={"ghost"}
+            className={"rounded-md"}
+          >
+            <HugeiconsIcon icon={Edit} className="size-4" />
+          </Button>
           {/* Delete Button */}
           <Button
             onClick={(e) => {
               e.stopPropagation()
               onDelete?.()
             }}
-            size={"icon"}
+            size={"icon-sm"}
             variant={"destructive"}
             className={"rounded-md"}
           >
