@@ -40,10 +40,10 @@ const Droppable: React.FC<DroppableProps> = ({
 
   const baseClass = cn(
     "p-3 size-full border border-dashed border-transparent transition-colors",
-    isOver &&
-      (canDrop
-        ? "bg-blue-200/40 border-blue-400 pointer-events-auto"
-        : "pointer-events-none"),
+    // isOver &&
+    //   (canDrop
+    //     ? "bg-blue-200/40 border-blue-400 pointer-events-auto"
+    //     : "pointer-events-none"),
   )
 
   return (

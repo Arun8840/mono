@@ -51,17 +51,14 @@ const Draggable: React.FC<DraggableProps> = ({
         id={id}
         ref={setNodeRef}
         // Added a slight ring on hover to define the boundary of the element being edited
-        className={cn(
-          "relative group transition-all duration-200 hover:ring-2 hover:ring-primary/50",
-          className,
-        )}
+        className={cn("relative group transition-all duration-200", className)}
         style={style}
       >
         {/* Unified Toolbar */}
         <div
-          className="absolute -top-4 right-0 flex items-center gap-1 z-50 px-1 py-1 
+          className="absolute right-0 flex items-center gap-1 z-50 px-1 py-1 
                       bg-background border border-border rounded-lg shadow-lg 
-                      opacity-0 group-hover:opacity-100 group-hover:-top-9 
+                      opacity-0 group-hover:opacity-100 group-hover:bottom-0 
                       transition-all duration-200 pointer-events-auto"
         >
           {/* Drag Handle */}
