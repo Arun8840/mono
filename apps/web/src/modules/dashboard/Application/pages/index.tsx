@@ -39,7 +39,7 @@ function ApplicationPages({ appId }: ApplicationPagesProps) {
         return (
           <div
             key={item?.id}
-            onDoubleClick={() => navigation.push(`/${item?.id}`)}
+            onDoubleClick={() => navigation.push(`/${appId}/page/${item?.id}`)}
             className="border bg-card rounded p-2 h-70 flex flex-col gap-2 justify-center items-center text-muted-foreground"
           >
             <HugeiconsIcon icon={Paperclip} />

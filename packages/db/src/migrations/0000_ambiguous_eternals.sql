@@ -54,14 +54,25 @@ CREATE TABLE "dragItems" (
 	"type" "type" NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "components" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" text NOT NULL,
+	"type" text NOT NULL,
+	"applicationId" uuid NOT NULL,
+	"pageId" uuid NOT NULL,
+	"styles" jsonb,
+	"position" jsonb NOT NULL,
+	"properties" jsonb
+);
+--> statement-breakpoint
 CREATE TABLE "pages" (
-	"id" text PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" text NOT NULL,
 	"description" text NOT NULL,
-	"applicationId" text NOT NULL,
+	"applicationId" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
-	"styles" json DEFAULT '{"background":"#000000","padding":null}'::json
+	"styles" jsonb DEFAULT '{"background":"#000000","padding":null}'::jsonb
 );
 --> statement-breakpoint
 CREATE TABLE "application" (
@@ -75,8 +86,12 @@ CREATE TABLE "application" (
 --> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "components" ADD CONSTRAINT "components_applicationId_application_id_fk" FOREIGN KEY ("applicationId") REFERENCES "public"."application"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "components" ADD CONSTRAINT "components_pageId_pages_id_fk" FOREIGN KEY ("pageId") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "pages" ADD CONSTRAINT "pages_applicationId_application_id_fk" FOREIGN KEY ("applicationId") REFERENCES "public"."application"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "application" ADD CONSTRAINT "application_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_userId_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
-CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");
+CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");--> statement-breakpoint
+CREATE INDEX "page_id_idx" ON "components" USING btree ("pageId");--> statement-breakpoint
+CREATE INDEX "application_id_idx" ON "components" USING btree ("applicationId");

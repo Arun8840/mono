@@ -23,6 +23,7 @@ export function EditorSidebar({
   const params = useParams()
   const appId = params.appId
   const currentPath = usePathname()
+  const isPageDesign = currentPath?.includes("/page")
   const data = {
     navMain: [
       {
@@ -51,6 +52,8 @@ export function EditorSidebar({
       },
     ],
   }
+
+  if (isPageDesign) return
 
   return (
     <Sidebar {...props} collapsible="icon">

@@ -6,6 +6,10 @@ import {
   applicationCreationModel,
   applicationDeleteModel,
   applicationUpdateModel,
+  componentCreationModel,
+  componentMoveModel,
+  componentRemoveModel,
+  componentUpdateModel,
   pageCreationModel,
   pageDeleteModel,
   pageUpdateModel,
@@ -101,6 +105,66 @@ export const applicationController = new Elysia()
         {
           auth: true,
           body: pageUpdateModel,
+        },
+      ),
+  )
+  .group("/app/pages/component", (component) =>
+    component
+      .get(
+        "/:pageId",
+        ({ applicationService, params }) => {
+          const { pageId } = params
+          if (!pageId) {
+            throw new Error("Page ID is required")
+          }
+
+          return applicationService.getPageComponents(pageId)
+        },
+        {
+          auth: true,
+          params: t.Object({
+            pageId: t.String(),
+          }),
+        },
+      )
+      .post(
+        "/page/component/create",
+        ({ applicationService, body }) => {
+          return applicationService.createPageComponent(body)
+        },
+        {
+          auth: true,
+          body: componentCreationModel,
+        },
+      )
+      .post(
+        "/page/component/update",
+        ({ applicationService, body }) => {
+          return applicationService.updatePageComponent(body)
+        },
+        {
+          auth: true,
+          body: componentUpdateModel,
+        },
+      )
+      .post(
+        "/page/component/remove",
+        ({ applicationService, body }) => {
+          return applicationService.removePageComponent(body)
+        },
+        {
+          auth: true,
+          body: componentRemoveModel,
+        },
+      )
+      .post(
+        "/page/component/move",
+        ({ applicationService, body }) => {
+          return applicationService.movePageComponent(body)
+        },
+        {
+          auth: true,
+          body: componentMoveModel,
         },
       ),
   )
