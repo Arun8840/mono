@@ -6,4 +6,7 @@ export const ComponentRegistry = {
   Heading: dynamic(() => import("./dropped-components/Heading"), {
     loading: () => <Skeleton className={skeletonClass} />,
   }),
+  Button: dynamic(() => import("./dropped-components/Button"), {
+    loading: () => <Skeleton className={skeletonClass} />,
+  }),
 }

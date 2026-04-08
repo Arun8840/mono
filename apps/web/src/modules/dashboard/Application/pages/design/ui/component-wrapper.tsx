@@ -83,7 +83,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
   }
   // ! resize component
   const handleResize = (delta: { width: number; height: number }) => {
-    const COLS = 120
+    const COLS = 240
     const newW = Math.round(
       Math.max(
         1,

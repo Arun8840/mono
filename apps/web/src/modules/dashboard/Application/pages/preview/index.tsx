@@ -2,7 +2,7 @@
 import { client } from "@repo/server/client"
 import { Spinner } from "@repo/ui/components"
 import { useQuery } from "@tanstack/react-query"
-import React, { useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import { ComponentRegistry } from "../design/ui/Registry"
 import { componentType } from "@/types/global"
 
@@ -12,7 +12,7 @@ type PagePreviewProps = {
 }
 
 const ROW_HEIGHT = 10
-const GRID_COLUMNS = 120
+const GRID_COLUMNS = 240
 
 const PreviewFallback = ({ isError }: { isError: boolean }) => (
   <div className="size-full grid place-items-center">
