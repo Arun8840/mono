@@ -32,6 +32,7 @@ export const useComponentContext = () => {
 interface DroppedComponentWrapperProps extends ComponentWrapperProps {
   children: React.ReactNode
   toolbar?: React.ReactNode
+  isPreview?: boolean
 }
 
 const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
@@ -157,16 +158,19 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
               width: "100%",
               height: "100%",
             }}
-            enable={{
-              right: true,
-              bottom: true,
-              left: true,
-              top: true,
-              topRight: true,
-              topLeft: true,
-              bottomLeft: true,
-              bottomRight: true,
-            }}
+            enable={
+              !isPreview && {
+                right: true,
+                bottom: true,
+                left: true,
+                top: true,
+                topRight: true,
+                topLeft: true,
+                bottomLeft: true,
+                bottomRight: true,
+              }
+            }
+            grid={[dimensions.colWidth, dimensions.rowHeight]}
             onResizeStop={(e, dir, ref, d) => handleResize(d)}
             handleComponent={{
               top: <ResizeHandle direction="top" className="bg-primary" />,
@@ -192,9 +196,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
             <div
               className={cn(
                 "h-full w-full p-0.5 bg-transparent border border-dashed border-muted",
-                isSelected
-                  ? "border-dashed border-blue-500"
-                  : "border border-dashed hover:border-blue-500",
+                isSelected && "border-dashed border-blue-500",
               )}
               onMouseDown={(e) => isSelected && e.stopPropagation()}
             >
