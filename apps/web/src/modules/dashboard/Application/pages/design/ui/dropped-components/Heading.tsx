@@ -59,4 +59,4 @@ const Heading: React.FC<HeadingProps> = ({ value, dimensions, isPreview }) => {
   )
 }
 
-export default Heading
+export default React.memo(Heading)

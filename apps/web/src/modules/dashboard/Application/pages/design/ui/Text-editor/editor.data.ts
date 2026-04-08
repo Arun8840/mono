@@ -41,15 +41,13 @@ export const fontWeightOptions = [
 ]
 
 export const lineHeightOptions = [
-  { label: "1", value: "1" },
-  { label: "1.15", value: "1.15" },
-  { label: "1.25", value: "1.25" },
-  { label: "1.5", value: "1.5" },
-  { label: "1.75", value: "1.75" },
-  { label: "2", value: "2" },
-  { label: "2.5", value: "2.5" },
-  { label: "3", value: "3" },
-]
+  { label: "Default", value: null },
+  { label: "Single (1)", value: "1" },
+  { label: "Snug (1.25)", value: "1.25" },
+  { label: "Normal (1.5)", value: "1.5" },
+  { label: "Relaxed (1.75)", value: "1.75" },
+  { label: "Double (2)", value: "2" },
+] as const
 
 export const textAligner = [
   { label: "Left", value: "left", icon: AlignLeft },

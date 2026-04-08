@@ -171,7 +171,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
               }
             }
             grid={[dimensions.colWidth, dimensions.rowHeight]}
-            onResizeStop={(e, dir, ref, d) => handleResize(d)}
+            onResizeStop={(_e, _dir, _ref, d) => handleResize(d)}
             handleComponent={{
               top: <ResizeHandle direction="top" className="bg-primary" />,
               bottom: (
