@@ -1,45 +1,45 @@
-import React from "react"
-import type { Editor } from "@tiptap/react"
+import React from "react";
+import type { Editor } from "@tiptap/react";
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components"
-import { headings, textAligner } from "./editor.data"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { Heading } from "@hugeicons/core-free-icons"
+} from "@repo/ui/components";
+import { headings, textAligner } from "./editor.data";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Heading } from "@hugeicons/core-free-icons";
 
 interface TextEditorToolbarProps {
-  editor: Editor | null
+  editor: Editor | null;
 }
 
 const baseClass =
-  "w-fit absolute -top-12 left-0 z-50 bg-card rounded-lg p-1.5 flex items-center gap-2"
+  "w-fit absolute -top-12 left-0 z-50 bg-card rounded-lg p-1.5 flex items-center gap-2";
 
 const TextEditorToolbar = ({ editor }: TextEditorToolbarProps) => {
-  if (!editor) return null
+  if (!editor) return null;
 
   return (
     <div className={baseClass}>
-      {/* {createHeadingSize(editor)} */}
+      {createHeadingSize(editor)}
       {createTextAligner(editor)}
     </div>
-  )
-}
+  );
+};
 
-export default TextEditorToolbar
+export default TextEditorToolbar;
 
 const createHeadingSize = (editor: Editor) => {
   const currentLevel = [1, 2, 3, 4, 5, 6].find((level) =>
     editor.isActive("heading", { level }),
-  )
+  );
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        nativeButton={false}
+        nativeButton={true}
         render={
           <Button
             size={"icon-sm"}
@@ -52,7 +52,7 @@ const createHeadingSize = (editor: Editor) => {
       />
       <DropdownMenuContent>
         {headings.map((heading) => {
-          const isActive = editor.isActive("heading", { level: heading.level })
+          const isActive = editor.isActive("heading", { level: heading.level });
           return (
             <DropdownMenuItem
               key={heading.level}
@@ -68,7 +68,7 @@ const createHeadingSize = (editor: Editor) => {
               <HugeiconsIcon icon={heading.icon} />
               <span className="ml-2">Heading {heading.level}</span>
             </DropdownMenuItem>
-          )
+          );
         })}
         <DropdownMenuItem
           onClick={() => editor.chain().focus().setParagraph().run()}
@@ -78,12 +78,12 @@ const createHeadingSize = (editor: Editor) => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
+  );
+};
 
 const createTextAligner = (editor: Editor) => {
   return textAligner.map((aligner) => {
-    const isActive = editor.isActive({ textAlign: aligner.value })
+    const isActive = editor.isActive({ textAlign: aligner.value });
 
     return (
       <Button
@@ -96,6 +96,6 @@ const createTextAligner = (editor: Editor) => {
       >
         <HugeiconsIcon icon={aligner.icon} />
       </Button>
-    )
-  })
-}
+    );
+  });
+};
