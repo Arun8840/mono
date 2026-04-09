@@ -9,6 +9,11 @@ import {
   AlignCenter,
   AlignRight,
   AlignJustify,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Code,
 } from "@hugeicons/core-free-icons"
 
 export const headings = [
@@ -54,4 +59,12 @@ export const textAligner = [
   { label: "Center", value: "center", icon: AlignCenter },
   { label: "Right", value: "right", icon: AlignRight },
   { label: "Justify", value: "justify", icon: AlignJustify },
+]
+
+export const textMarkdowns = [
+  { label: "Bold", value: "bold", icon: Bold },
+  { label: "Italic", value: "italic", icon: Italic },
+  { label: "Underline", value: "underline", icon: Underline },
+  { label: "Strikethrough", value: "strike", icon: Strikethrough },
+  { label: "Code", value: "code", icon: Code },
 ]

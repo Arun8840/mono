@@ -9,6 +9,9 @@ import { useApplicationStore } from "@/store/app"
 import { useMutation } from "@tanstack/react-query"
 import { client } from "@repo/server/client"
 
+//* text editor
+import { TextStyle, Color } from "@tiptap/extension-text-style"
+
 export interface HeadingProps extends ComponentWrapperProps {}
 const Heading: React.FC<HeadingProps> = ({ value, dimensions, isPreview }) => {
   const { properties } = value
@@ -28,6 +31,8 @@ const Heading: React.FC<HeadingProps> = ({ value, dimensions, isPreview }) => {
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
+      TextStyle,
+      Color,
     ],
     content: content,
     immediatelyRender: false,

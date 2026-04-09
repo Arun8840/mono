@@ -8,6 +8,9 @@ import TextAlign from "@tiptap/extension-text-align"
 import { useMutation } from "@tanstack/react-query"
 import { useApplicationStore } from "@/store/app"
 import { client } from "@repo/server/client"
+import TextEditorToolbar from "../Text-editor"
+
+import { TextStyle, Color } from "@tiptap/extension-text-style"
 
 export interface DroppedButtonProps extends ComponentWrapperProps {}
 const DroppedButton: React.FC<DroppedButtonProps> = ({
@@ -29,6 +32,8 @@ const DroppedButton: React.FC<DroppedButtonProps> = ({
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
+      TextStyle,
+      Color,
     ],
     content: content,
     immediatelyRender: false,
@@ -49,6 +54,7 @@ const DroppedButton: React.FC<DroppedButtonProps> = ({
       value={value}
       dimensions={dimensions}
       isPreview={isPreview}
+      toolbar={<TextEditorToolbar editor={editor} />}
     >
       <Button className={"w-full h-full"}>
         <EditorContent editor={editor} className="outline-none" />

@@ -7,14 +7,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components"
-import { headings, lineHeightOptions, textAligner } from "./editor.data"
+import { headings, textAligner, textMarkdowns } from "./editor.data"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Heading, Space } from "@hugeicons/core-free-icons"
+import {
+  AlignLeft,
+  Heading,
+  ColorPickerFreeIcons,
+} from "@hugeicons/core-free-icons"
 
 interface TextEditorToolbarProps {
   editor: Editor | null
 }
-type LineHeightValue = (typeof lineHeightOptions)[number]["value"]
 const baseClass =
   "w-fit absolute -top-12 left-0 z-50 bg-card rounded-lg p-1.5 flex items-center gap-2"
 
@@ -23,9 +26,10 @@ const TextEditorToolbar = ({ editor }: TextEditorToolbarProps) => {
 
   return (
     <div className={baseClass}>
-      {createTextLineHeight(editor)}
       {createHeadingSize(editor)}
       {createTextAligner(editor)}
+      {createTextMarkdown(editor)}
+      {createColorModifier(editor)}
     </div>
   )
 }
@@ -47,7 +51,11 @@ const createHeadingSize = (editor: Editor) => {
             variant={currentLevel ? "default" : "outline"}
             className={"rounded"}
           >
-            <HugeiconsIcon icon={Heading} />
+            {currentLevel ? (
+              <small>H{currentLevel}</small>
+            ) : (
+              <HugeiconsIcon icon={Heading} />
+            )}
           </Button>
         }
       />
@@ -83,65 +91,74 @@ const createHeadingSize = (editor: Editor) => {
 }
 
 const createTextAligner = (editor: Editor) => {
-  return textAligner.map((aligner) => {
-    const isActive = editor.isActive({ textAlign: aligner.value })
-
-    return (
-      <Button
-        key={aligner.value}
-        size={"icon-xs"}
-        variant={isActive ? "default" : "outline"}
-        className={"rounded"}
-        title={aligner.label}
-        onClick={() => editor.chain().focus().setTextAlign(aligner.value).run()}
-      >
-        <HugeiconsIcon icon={aligner.icon} />
-      </Button>
-    )
-  })
-}
-
-const isLineHeightActive = (editor: Editor, value: LineHeightValue) => {
-  if (!value) return false
-  return (
-    editor.isActive("paragraph", { lineHeight: value }) ||
-    editor.isActive("heading", { lineHeight: value })
-  )
-}
-
-const createTextLineHeight = (editor: Editor) => {
-  const currentLevel = lineHeightOptions.find((opt) =>
-    isLineHeightActive(editor, opt.value),
-  )
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         nativeButton={true}
         render={
-          <Button
-            size={"icon-xs"}
-            variant={currentLevel ? "default" : "outline"}
-            className={"rounded"}
-          >
-            <HugeiconsIcon icon={Space} />
+          <Button size={"icon-xs"} variant={"outline"} className={"rounded"}>
+            <HugeiconsIcon icon={AlignLeft} />
           </Button>
         }
       />
       <DropdownMenuContent>
-        {lineHeightOptions.map((lineHeight) => {
-          const isActive = lineHeight.value
-            ? isLineHeightActive(editor, lineHeight.value)
-            : !currentLevel
+        {textAligner.map((aligner) => {
+          const isActive = editor.isActive("textAlign", {
+            textAlign: aligner.value,
+          })
           return (
             <DropdownMenuItem
-              key={lineHeight.value ?? "default"}
+              key={aligner.value}
+              onClick={() =>
+                editor.chain().focus().setTextAlign(aligner.value).run()
+              }
               className={isActive ? "bg-accent" : ""}
             >
-              <span className="ml-2">{lineHeight.label}</span>
+              <HugeiconsIcon icon={aligner.icon} />
+              <span className="ml-2">{aligner.label}</span>
             </DropdownMenuItem>
           )
         })}
       </DropdownMenuContent>
     </DropdownMenu>
+  )
+}
+
+const createTextMarkdown = (editor: Editor) => {
+  return textMarkdowns?.map((markdown, markdownIdx) => {
+    return (
+      <Button
+        key={`${markdown?.label}-${markdownIdx}`}
+        size={"icon-xs"}
+        variant={editor.isActive(markdown.value) ? "default" : "outline"}
+        className={"rounded"}
+        onClick={() => editor.chain().focus().toggleMark(markdown.value).run()}
+        title={markdown?.label}
+      >
+        <HugeiconsIcon icon={markdown.icon} />
+      </Button>
+    )
+  })
+}
+
+const createColorModifier = (editor: Editor) => {
+  const currentColor = editor.getAttributes("textStyle").color
+  return (
+    <label htmlFor="colorSelector">
+      <input
+        type="color"
+        name="editor color"
+        id="colorSelector"
+        className="sr-only"
+        onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
+      />
+      <div
+        className={"rounded p-1"}
+        title="Color"
+        style={{ backgroundColor: currentColor }}
+      >
+        <HugeiconsIcon icon={ColorPickerFreeIcons} size={15} />
+      </div>
+    </label>
   )
 }
