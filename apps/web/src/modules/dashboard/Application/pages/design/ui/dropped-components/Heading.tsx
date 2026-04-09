@@ -14,7 +14,7 @@ import { TextStyle, Color } from "@tiptap/extension-text-style"
 
 export interface HeadingProps extends ComponentWrapperProps {}
 const Heading: React.FC<HeadingProps> = ({ value, dimensions, isPreview }) => {
-  const { properties } = value
+  const { properties, styles } = value
 
   //* hooks
   const updateComponent = useApplicationStore((state) => state?.updateComponent)
@@ -57,7 +57,11 @@ const Heading: React.FC<HeadingProps> = ({ value, dimensions, isPreview }) => {
       toolbar={<TextEditorToolbar editor={editor} />}
       isPreview={isPreview}
     >
-      <div className="prose prose-sm max-w-none size-full p-0.5">
+      <div
+        id={value?.id}
+        style={styles}
+        className="prose prose-sm max-w-none size-full p-0.5"
+      >
         <EditorContent editor={editor} className="h-full outline-none" />
       </div>
     </DroppedComponentWrapper>
