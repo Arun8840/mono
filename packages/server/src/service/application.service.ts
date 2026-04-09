@@ -3,7 +3,6 @@ import {
   appSchemaTable,
   appPageSchemaTable,
   appComponentsSchemaTable,
-  ComponentStyle,
   PositionType,
 } from "@repo/db"
 import { and, eq } from "drizzle-orm"

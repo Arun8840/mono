@@ -83,7 +83,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
   }
   // ! resize component
   const handleResize = (delta: { width: number; height: number }) => {
-    const COLS = 120
+    const COLS = 240
     const newW = Math.round(
       Math.max(
         1,
@@ -171,7 +171,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
               }
             }
             grid={[dimensions.colWidth, dimensions.rowHeight]}
-            onResizeStop={(e, dir, ref, d) => handleResize(d)}
+            onResizeStop={(_e, _dir, _ref, d) => handleResize(d)}
             handleComponent={{
               top: <ResizeHandle direction="top" className="bg-primary" />,
               bottom: (

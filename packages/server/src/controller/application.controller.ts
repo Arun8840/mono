@@ -41,7 +41,7 @@ export const applicationController = new Elysia()
       )
       .post(
         "/remove",
-        ({ applicationService, body, user }) => {
+        ({ applicationService, body }) => {
           return applicationService.remove({ appId: body.appId })
         },
         {
@@ -51,7 +51,7 @@ export const applicationController = new Elysia()
       )
       .post(
         "/update",
-        ({ applicationService, body, user }) => {
+        ({ applicationService, body }) => {
           return applicationService.update(body)
         },
         {
