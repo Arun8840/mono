@@ -22,7 +22,7 @@ export const pageCreationModel = t.Object({
     minLength: 1,
     error: "Application ID is required",
   }),
-  styles: t.Optional(t.Object({})),
+  styles: t.Optional(t.Record(t.String(), t.Any())),
 })
 export const pageDeleteModel = t.Object({
   appId: t.String({ minLength: 1, error: "Application ID is required" }),
@@ -36,7 +36,7 @@ export const pageUpdateModel = t.Object({
     minLength: 1,
     error: "Application ID is required",
   }),
-  styles: t.Optional(t.Object({})),
+  styles: t.Optional(t.Record(t.String(), t.Any())),
 })
 
 // * APPLICATION PAGE COMPONENTS MODEL
@@ -51,7 +51,7 @@ export const componentCreationModel = t.Object({
     minLength: 1,
     error: "Page ID is required",
   }),
-  styles: t.Optional(t.Object({})),
+  styles: t.Optional(t.Record(t.String(), t.Any())),
   position: t.Optional(
     t.Object({
       x: t.Number(),
@@ -90,7 +90,7 @@ export const componentUpdateModel = t.Object({
     minLength: 1,
     error: "Page ID is required",
   }),
-  styles: t.Optional(t.Object({})),
+  styles: t.Optional(t.Record(t.String(), t.Any())),
   position: t.Optional(
     t.Object({
       x: t.Number(),
