@@ -376,16 +376,14 @@ export const createApplicationService = () => {
         .update(appComponentsSchemaTable)
         .set({
           name: component.name,
-          type: component.name,
-          styles: component.styles,
-          position: component.position,
           properties: component.properties,
+          position: component.position,
+          styles: component.styles,
         })
         .where(
           and(
             eq(appComponentsSchemaTable.id, component.id),
             eq(appComponentsSchemaTable.pageId, component.pageId),
-            eq(appComponentsSchemaTable.applicationId, component.applicationId),
           ),
         )
         .returning()

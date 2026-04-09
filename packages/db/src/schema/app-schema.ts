@@ -5,18 +5,7 @@ import { uuid } from "drizzle-orm/pg-core"
 import { pgTable } from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { index } from "drizzle-orm/pg-core"
-
-export type ComponentStyle = {
-  backgroundColor?: string | null
-  padding?: number | null
-  margin?: number | null
-  border?: string | null
-  borderRadius?: number | null
-  boxShadow?: string | null
-  opacity?: number | null
-  cursor?: string | null
-  transition?: string | null
-}
+import type { CSSProperties } from "react"
 export type PositionType = {
   x: number
   y: number
@@ -79,7 +68,7 @@ export const appComponentsSchemaTable = pgTable(
     pageId: uuid("pageId")
       .references(() => appPageSchemaTable.id, { onDelete: "cascade" })
       .notNull(),
-    styles: jsonb("styles").$type<ComponentStyle>(),
+    styles: jsonb("styles").$type<CSSProperties>().default({}),
     position: jsonb("position").$type<PositionType>().notNull(),
     properties: jsonb("properties").$type<PropertiesTypes>(),
   },
