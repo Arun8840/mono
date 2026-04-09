@@ -28,7 +28,15 @@ const ResizeHandle: React.FC<ResizeHandleProps> = ({
           ? "nwse-resize"
           : direction === "topRight"
             ? "nesw-resize"
-            : "pointer"
+            : direction === "top"
+              ? "ns-resize"
+              : direction === "bottom"
+                ? "ns-resize"
+                : direction === "left"
+                  ? "ew-resize"
+                  : direction === "right"
+                    ? "ew-resize"
+                    : "pointer"
 
   // Directional position mapping (for absolute placement, if needed)
   const positionMap: Record<string, string> = {

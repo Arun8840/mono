@@ -46,7 +46,12 @@ function PageDesign({ appId, pageId }: PageDesignProps) {
     }
   }, [data])
 
-  if (isPending) return <Spinner />
+  if (isPending)
+    return (
+      <div className="size-full grid place-items-center">
+        <Spinner />
+      </div>
+    )
   if (isError)
     return (
       <div className="size-full grid place-items-center">

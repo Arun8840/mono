@@ -15,7 +15,7 @@ function PageComponent() {
       // Ensure we use the exact same calculation as the editor
       setDimensions((prev) => ({
         ...prev,
-        colWidth: width / 120,
+        colWidth: width / 240,
         rowHeight: 10,
       }))
     }
@@ -25,17 +25,7 @@ function PageComponent() {
     return () => window.removeEventListener("resize", updateSize)
   }, [])
   return (
-    <div
-      ref={containerRef}
-      className="p-2 size-full"
-      style={{
-        gridTemplateColumns: `repeat(120, 1fr)`, // 120 equal columns for high accuracy
-        gridAutoRows: `${dimensions.rowHeight}px`, // Matches your ROW_HEIGHT
-        ...(page?.styles?.background && {
-          background: page?.styles?.background,
-        }),
-      }}
-    >
+    <div ref={containerRef} className="p-2 size-full">
       <Droppable
         id={`design_${page?.id}`}
         type="component"
@@ -44,7 +34,7 @@ function PageComponent() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(120, 1fr)`,
+            gridTemplateColumns: `repeat(240, 1fr)`,
             gridAutoRows: `${dimensions.rowHeight}px`,
             gap: 0, // CRITICAL: Gaps break the math unless accounted for
             padding: 0, // Better to use margin on children or a wrapper
