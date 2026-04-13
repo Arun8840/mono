@@ -12,6 +12,7 @@ import {
 } from "@repo/ui/components"
 import { useQuery } from "@tanstack/react-query"
 import React from "react"
+import { ComponentRegistryIcons } from "./Registry"
 
 const ComponentItems = () => {
   const { data, isPending, isError } = useQuery({
@@ -29,22 +30,27 @@ const ComponentItems = () => {
       <div className="grid grid-cols-4 gap-2">
         {Array.isArray(dragItems) &&
           dragItems?.map((items) => {
+            const Icon =
+              ComponentRegistryIcons?.[
+                items?.componentType as keyof typeof ComponentRegistryIcons
+              ] || ThreeDViewIcon
             return (
-              <Button
-                variant={"outline"}
-                nativeButton={false}
+              <Draggable
+                id={items.id}
+                data={items}
+                type={items.type}
                 key={items.id}
-                render={
-                  <Draggable
-                    id={items.id}
-                    data={items}
-                    type={items.type}
-                    className="size-full p-2"
-                  >
-                    <HugeiconsIcon icon={ThreeDViewIcon} /> {items.name}
-                  </Draggable>
-                }
-              />
+                className="size-full"
+              >
+                <Button
+                  className={"hover:bg-primary hover:text-secondary-foreground"}
+                  variant={"outline"}
+                  title={items?.name}
+                  size={"icon"}
+                >
+                  <HugeiconsIcon icon={Icon} />
+                </Button>
+              </Draggable>
             )
           })}
       </div>
