@@ -4,6 +4,7 @@ import {
   appPageSchemaTable,
   appComponentsSchemaTable,
   PositionType,
+  assetSchemaTable,
 } from "@repo/db"
 import { and, eq } from "drizzle-orm"
 import {
@@ -14,10 +15,14 @@ import {
   ComponentMoveModel,
   ComponentRemoveModel,
   ComponentUpdateModel,
+  GetAssetModel,
   PageCreationModel,
   PageDeleteModel,
   PageUpdateModel,
+  UpdateAssetModel,
+  UploadAssetModel,
 } from "../models/app.model"
+import { status } from "elysia"
 
 export const createApplicationService = () => {
   return {
@@ -441,6 +446,120 @@ export const createApplicationService = () => {
         data: response,
       }
     },
+
+    //* FOR COMPONENT ASSETS
+    getComponentAsset: async (asset: GetAssetModel) => {
+      if (!asset?.assetId || !asset?.componentId) {
+        throw new Error("Invalid component data", {
+          cause: {
+            status: 400,
+            message: "Invalid asset data",
+          },
+        })
+      }
+
+      const [response] = await db
+        .select()
+        .from(assetSchemaTable)
+        .where(
+          and(
+            eq(assetSchemaTable?.id, asset?.assetId),
+            eq(assetSchemaTable?.componentId, asset?.componentId),
+          ),
+        )
+        .limit(1)
+
+      if (!response) {
+        throw new Error("Asset data not found", {
+          cause: {
+            status: 404,
+            message: "Asset not found",
+          },
+        })
+      }
+
+      return {
+        status: 200,
+        data: response,
+        message: "Asset retrieved successfully",
+      }
+    },
+    uploadAsset: async (asset: UploadAssetModel) => {
+      if (!asset?.src || !asset?.componentId) {
+        throw new Error("Invalid component data", {
+          cause: {
+            status: 400,
+            message: "Invalid asset data",
+          },
+        })
+      }
+
+      const [response] = await db
+        .insert(assetSchemaTable)
+        .values(asset)
+        .returning()
+
+      return {
+        status: 200,
+        data: response,
+        message: "Asset uploaded successfully",
+      }
+    },
+    removeAsset: async (asset: GetAssetModel) => {
+      if (!asset?.assetId || !asset?.componentId) {
+        throw new Error("Invalid component data", {
+          cause: {
+            status: 400,
+            message: "Invalid asset data",
+          },
+        })
+      }
+
+      const [response] = await db
+        .delete(assetSchemaTable)
+        .where(
+          and(
+            eq(assetSchemaTable.id, asset?.assetId),
+            eq(assetSchemaTable.componentId, asset?.componentId),
+          ),
+        )
+        .returning()
+
+      return {
+        status: 200,
+        data: response,
+        message: "Asset uploaded successfully",
+      }
+    },
+    // updateAsset: async (asset: UpdateAssetModel) => {
+    //   if (!asset?.assetId || !asset?.componentId) {
+    //     throw new Error("Invalid component data", {
+    //       cause: {
+    //         status: 400,
+    //         message: "Invalid asset data",
+    //       },
+    //     })
+    //   }
+
+    //   const [response] = await db
+    //     .update(assetSchemaTable)
+    //     .set({
+    //       src: asset?.src,
+    //     })
+    //     .where(
+    //       and(
+    //         eq(assetSchemaTable.id, asset?.assetId),
+    //         eq(assetSchemaTable?.componentId, asset?.componentId),
+    //       ),
+    //     )
+    //     .returning()
+
+    //   return {
+    //     status: 200,
+    //     data: response,
+    //     message: "Asset uploaded successfully",
+    //   }
+    // },
   }
 }
 

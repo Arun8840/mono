@@ -127,6 +127,24 @@ export const componentMoveModel = t.Object({
   }),
 })
 
+export const getAssetModel = t.Object({
+  assetId: t.String(),
+  componentId: t.String(),
+})
+
+export const uploadAssetModel = t.Object({
+  id: t.String(),
+  componentId: t.String(),
+  src: t.String(),
+  applicationId: t.String(),
+})
+
+export const updateAssetModel = t.Object({
+  assetId: t.String(),
+  componentId: t.String(),
+  src: t.String(),
+})
+
 export type ApplicationCreationModel = Static<typeof applicationCreationModel>
 export type ApplicationUpdateModel = Static<typeof applicationUpdateModel>
 export type ApplicationDeleteModel = Static<typeof applicationDeleteModel>
@@ -137,3 +155,6 @@ export type ComponentCreationModel = Static<typeof componentCreationModel>
 export type ComponentRemoveModel = Static<typeof componentRemoveModel>
 export type ComponentUpdateModel = Static<typeof componentUpdateModel>
 export type ComponentMoveModel = Static<typeof componentMoveModel>
+export type GetAssetModel = Static<typeof getAssetModel>
+export type UploadAssetModel = Static<typeof uploadAssetModel>
+export type UpdateAssetModel = Static<typeof updateAssetModel>

@@ -1,6 +1,6 @@
-import Elysia, { t } from "elysia";
-import { authPlugin } from "../plugins/auth.plugin";
-import { applicationPlugin } from "../plugins/application.plugin";
+import Elysia, { t } from "elysia"
+import { authPlugin } from "../plugins/auth.plugin"
+import { applicationPlugin } from "../plugins/application.plugin"
 
 import {
   applicationCreationModel,
@@ -10,10 +10,12 @@ import {
   componentMoveModel,
   componentRemoveModel,
   componentUpdateModel,
+  getAssetModel,
   pageCreationModel,
   pageDeleteModel,
   pageUpdateModel,
-} from "../models/app.model";
+  uploadAssetModel,
+} from "../models/app.model"
 
 export const applicationController = new Elysia()
   .use(authPlugin)
@@ -23,7 +25,7 @@ export const applicationController = new Elysia()
       .get(
         "/",
         ({ applicationService, user }) => {
-          return applicationService.getAll(user?.id);
+          return applicationService.getAll(user?.id)
         },
         {
           auth: true,
@@ -32,7 +34,7 @@ export const applicationController = new Elysia()
       .post(
         "/create",
         ({ applicationService, body, user }) => {
-          return applicationService.create(body, user!.id);
+          return applicationService.create(body, user!.id)
         },
         {
           auth: true,
@@ -42,7 +44,7 @@ export const applicationController = new Elysia()
       .post(
         "/remove",
         ({ applicationService, body }) => {
-          return applicationService.remove({ appId: body.appId });
+          return applicationService.remove({ appId: body.appId })
         },
         {
           auth: true,
@@ -52,7 +54,7 @@ export const applicationController = new Elysia()
       .post(
         "/update",
         ({ applicationService, body }) => {
-          return applicationService.update(body);
+          return applicationService.update(body)
         },
         {
           auth: true,
@@ -66,9 +68,9 @@ export const applicationController = new Elysia()
         "/:appId",
         ({ applicationService, params }) => {
           if (!params.appId) {
-            throw new Error("Application ID is required");
+            throw new Error("Application ID is required")
           }
-          return applicationService.getAllPages(params.appId);
+          return applicationService.getAllPages(params.appId)
         },
         {
           auth: true,
@@ -80,7 +82,7 @@ export const applicationController = new Elysia()
       .post(
         "/create",
         ({ applicationService, body }) => {
-          return applicationService.createPage(body);
+          return applicationService.createPage(body)
         },
         {
           auth: true,
@@ -90,7 +92,7 @@ export const applicationController = new Elysia()
       .post(
         "/remove",
         ({ applicationService, body }) => {
-          return applicationService.removePage(body);
+          return applicationService.removePage(body)
         },
         {
           auth: true,
@@ -100,7 +102,7 @@ export const applicationController = new Elysia()
       .post(
         "/update",
         ({ applicationService, body }) => {
-          return applicationService.updatePage(body);
+          return applicationService.updatePage(body)
         },
         {
           auth: true,
@@ -113,12 +115,12 @@ export const applicationController = new Elysia()
       .get(
         "/:pageId",
         ({ applicationService, params }) => {
-          const { pageId } = params;
+          const { pageId } = params
           if (!pageId) {
-            throw new Error("Page ID is required");
+            throw new Error("Page ID is required")
           }
 
-          return applicationService.getPageComponents(pageId);
+          return applicationService.getPageComponents(pageId)
         },
         {
           auth: true,
@@ -130,7 +132,7 @@ export const applicationController = new Elysia()
       .post(
         "/page/component/create",
         ({ applicationService, body }) => {
-          return applicationService.createPageComponent(body);
+          return applicationService.createPageComponent(body)
         },
         {
           auth: true,
@@ -140,8 +142,8 @@ export const applicationController = new Elysia()
       .post(
         "/page/component/update",
         ({ applicationService, body }) => {
-          console.log("controller body", body);
-          return applicationService.updatePageComponent(body);
+          console.log("controller body", body)
+          return applicationService.updatePageComponent(body)
         },
         {
           auth: true,
@@ -151,7 +153,7 @@ export const applicationController = new Elysia()
       .post(
         "/page/component/remove",
         ({ applicationService, body }) => {
-          return applicationService.removePageComponent(body);
+          return applicationService.removePageComponent(body)
         },
         {
           auth: true,
@@ -161,11 +163,59 @@ export const applicationController = new Elysia()
       .post(
         "/page/component/move",
         ({ applicationService, body }) => {
-          return applicationService.movePageComponent(body);
+          return applicationService.movePageComponent(body)
         },
         {
           auth: true,
           body: componentMoveModel,
         },
       ),
-  );
+  )
+  .group("/component/asset", (asset) =>
+    asset
+      .get(
+        "/asset",
+        ({ applicationService, body }) => {
+          const { assetId, componentId } = body
+          if (!assetId || !componentId) {
+            throw new Error("ID is required")
+          }
+
+          return applicationService.getComponentAsset(body)
+        },
+        {
+          auth: true,
+          body: getAssetModel,
+        },
+      )
+      .post(
+        "/upload",
+        ({ applicationService, body }) => {
+          const { src, componentId } = body
+          if (!src || !componentId) {
+            throw new Error("asset data is required")
+          }
+
+          return applicationService.uploadAsset(body)
+        },
+        {
+          auth: true,
+          body: uploadAssetModel,
+        },
+      )
+      .post(
+        "/remove",
+        ({ applicationService, body }) => {
+          const { assetId, componentId } = body
+          if (!assetId || !componentId) {
+            throw new Error("ID is required")
+          }
+
+          return applicationService.removeAsset(body)
+        },
+        {
+          auth: true,
+          body: getAssetModel,
+        },
+      ),
+  )
