@@ -82,3 +82,5 @@ export {
   SelectTrigger,
   SelectValue,
 } from "./ui/select"
+
+export { GsapDraggable } from "./ui/animation/gsap-draggable"

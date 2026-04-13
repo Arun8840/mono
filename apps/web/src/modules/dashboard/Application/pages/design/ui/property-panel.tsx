@@ -9,7 +9,7 @@ import { componentType } from "@/types/global"
 import AppearanceProperties from "./Properties/property-appearance"
 import { useMutation } from "@tanstack/react-query"
 import { client } from "@repo/server/client"
-
+import { GsapDraggable } from "@repo/ui/components"
 function PropertyPanel() {
   const selectedComponent = useApplicationStore(
     (state) => state?.selectedComponent,
@@ -50,9 +50,9 @@ function PropertyPanel() {
 
   if (!selectedComponent) return
   return (
-    <section className="bg-card p-3 rounded-lg shadow-lg fixed top-1/2 -translate-y-1/2 right-2 w-2xs h-fit z-50 divide-y divide-dashed divide-primary/50 space-y-3">
-      <div className="flex items-center justify-between">
-        <h1>Properties</h1>
+    <GsapDraggable handle=".drag-handle" className="p-3 fixed top-1/2 -translate-y-1/2 right-2 w-2xs h-fit z-50 divide-y divide-dashed divide-primary/50 space-y-3">
+      <div className="flex items-center justify-between drag-handle">
+        <h1 className="select-none">Properties</h1>
         <Button
           onClick={() => setSelectedComponent(null)}
           type="button"
@@ -88,7 +88,7 @@ function PropertyPanel() {
           </Button>
         </div>
       </form>
-    </section>
+    </GsapDraggable>
   )
 }
 
