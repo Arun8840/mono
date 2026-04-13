@@ -57,7 +57,7 @@ export function useDragHandlers({
           type: dragData?.componentType || "",
           position: { x: gridX, y: gridY, w: 14, h: 30 },
           properties: {
-            content: "Heading",
+            content: `Type your ${dragData?.type} here`,
           },
           styles: {},
         }
