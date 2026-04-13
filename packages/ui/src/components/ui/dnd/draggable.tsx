@@ -56,9 +56,9 @@ const Draggable: React.FC<DraggableProps> = ({
       >
         {/* Unified Toolbar */}
         <div
-          className="absolute right-0 flex items-center gap-1 z-50 px-1 py-1 
+          className="absolute right-1 flex items-center gap-1 z-50 px-1 py-1 
                       bg-background border border-border rounded-lg shadow-lg 
-                      opacity-0 group-hover:opacity-100 group-hover:bottom-0 
+                      opacity-0 group-hover:opacity-100 bottom-1
                       transition-all duration-200 pointer-events-auto"
         >
           {/* Drag Handle */}
