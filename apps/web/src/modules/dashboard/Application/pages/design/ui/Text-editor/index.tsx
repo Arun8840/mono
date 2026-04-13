@@ -6,6 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Input,
 } from "@repo/ui/components"
 import { headings, textAligner, textMarkdowns } from "./editor.data"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -14,6 +15,7 @@ import {
   Heading,
   ColorPickerFreeIcons,
 } from "@hugeicons/core-free-icons"
+import { cn } from "@repo/ui/lib/utils"
 
 interface TextEditorToolbarProps {
   editor: Editor | null
@@ -41,52 +43,76 @@ const createHeadingSize = (editor: Editor) => {
     editor.isActive("heading", { level }),
   )
 
+  const handleFontSize = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = Number(e?.target?.value)
+    if (isNaN(value)) return
+
+    editor.chain().focus().setFontSize(`${value}px`).run()
+  }
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        nativeButton={true}
-        render={
-          <Button
-            size={"icon-xs"}
-            variant={currentLevel ? "default" : "outline"}
-            className={"rounded"}
-          >
-            {currentLevel ? (
-              <small>H{currentLevel}</small>
-            ) : (
-              <HugeiconsIcon icon={Heading} />
-            )}
-          </Button>
-        }
-      />
-      <DropdownMenuContent>
-        {headings.map((heading) => {
-          const isActive = editor.isActive("heading", { level: heading.level })
-          return (
-            <DropdownMenuItem
-              key={heading.level}
-              onClick={() =>
-                editor
-                  .chain()
-                  .focus()
-                  .toggleHeading({ level: heading.level as any })
-                  .run()
-              }
-              className={isActive ? "bg-accent" : ""}
+    <div className="flex items-center gap-2 bg-background p-1 rounded-md border shadow-sm w-fit">
+      {/* Heading Dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          nativeButton={true}
+          render={
+            <Button
+              size="icon-xs"
+              variant={currentLevel ? "default" : "ghost"}
+              className="h-7 w-7 rounded"
             >
-              <HugeiconsIcon icon={heading.icon} />
-              <span className="ml-2">Heading {heading.level}</span>
-            </DropdownMenuItem>
-          )
-        })}
-        <DropdownMenuItem
-          onClick={() => editor.chain().focus().setParagraph().run()}
-          className={!currentLevel ? "bg-accent" : ""}
-        >
-          <span>Paragraph</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+              {currentLevel ? (
+                <span className="text-[10px] font-bold">H{currentLevel}</span>
+              ) : (
+                <HugeiconsIcon icon={Heading} size={16} />
+              )}
+            </Button>
+          }
+        />
+        <DropdownMenuContent>
+          {headings.map((heading) => {
+            const isActive = editor.isActive("heading", {
+              level: heading.level,
+            })
+            return (
+              <DropdownMenuItem
+                key={heading.level}
+                onClick={() =>
+                  editor
+                    .chain()
+                    .focus()
+                    .toggleHeading({ level: heading.level as any })
+                    .run()
+                }
+                className={isActive ? "bg-accent" : ""}
+              >
+                <HugeiconsIcon icon={heading.icon} />
+                <span className="ml-2">Heading {heading.level}</span>
+              </DropdownMenuItem>
+            )
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* Font Size Input Group */}
+      <div className="flex items-center gap-1.5">
+        <div className="relative">
+          <Input
+            type="number"
+            defaultValue={16}
+            onBlur={handleFontSize}
+            className={cn(
+              "w-12 h-7 px-1 text-center text-xs rounded border-muted-foreground/20",
+              "focus-visible:ring-1 focus-visible:ring-primary",
+              "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+            )}
+          />
+        </div>
+        <span className="text-[10px] font-medium uppercase text-muted-foreground tracking-tight">
+          px
+        </span>
+      </div>
+    </div>
   )
 }
 
