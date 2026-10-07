@@ -12,13 +12,17 @@ import { client } from "@repo/server/client"
 //* text editor
 import { TextStyle, Color, FontSize } from "@tiptap/extension-text-style"
 
-export interface HeadingProps extends ComponentWrapperProps {}
-const Heading: React.FC<HeadingProps> = ({ value, dimensions, isPreview }) => {
+export interface ParagraphProps extends ComponentWrapperProps {}
+const Paragraph: React.FC<ParagraphProps> = ({
+  value,
+  dimensions,
+  isPreview,
+}) => {
   const { properties, styles } = value
 
   //* hooks
   const updateComponent = useApplicationStore((state) => state?.updateComponent)
-  const content = properties?.content || "<h1>Heading</h1>"
+  const content = properties?.content || "<p>Type your paragraph here</p>"
   const updateComponentMutate = useMutation({
     mutationFn: async () => {
       await client.app.pages.component.page.component.update.post(updateReq)
@@ -29,7 +33,7 @@ const Heading: React.FC<HeadingProps> = ({ value, dimensions, isPreview }) => {
     extensions: [
       StarterKit,
       TextAlign.configure({
-        types: ["heading", "paragraph"],
+        types: ["Paragraph", "paragraph"],
       }),
       TextStyle,
       FontSize,
@@ -69,4 +73,4 @@ const Heading: React.FC<HeadingProps> = ({ value, dimensions, isPreview }) => {
   )
 }
 
-export default React.memo(Heading)
+export default React.memo(Paragraph)

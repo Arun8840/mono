@@ -8,6 +8,7 @@ import { useApplicationStore } from "@/store/app"
 import { PageTypes } from "@/types/app.type"
 import PageComponent from "./ui/Page-ui"
 import { useCanvasDimensions, useDragHandlers } from "@/hooks"
+import PropertyPanel from "./ui/property-panel"
 
 type PageDesignProps = {
   appId: string
@@ -64,6 +65,7 @@ function PageDesign({ appId, pageId }: PageDesignProps) {
         <PageComponent />
       </div>
       <ToolBar />
+      <PropertyPanel />
     </DndProvider>
   )
 }

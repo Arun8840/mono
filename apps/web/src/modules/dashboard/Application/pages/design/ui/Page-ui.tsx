@@ -36,10 +36,9 @@ function PageComponent() {
             display: "grid",
             gridTemplateColumns: `repeat(240, 1fr)`,
             gridAutoRows: `${dimensions.rowHeight}px`,
-            gap: 0, // CRITICAL: Gaps break the math unless accounted for
-            padding: 0, // Better to use margin on children or a wrapper
+            gap: 0,
+            padding: 0,
             position: "relative",
-            backgroundColor: page?.styles?.backgroundColor,
           }}
           className="size-full grid relative"
         >

@@ -10,9 +10,11 @@ import {
   componentMoveModel,
   componentRemoveModel,
   componentUpdateModel,
+  getAssetModel,
   pageCreationModel,
   pageDeleteModel,
   pageUpdateModel,
+  uploadAssetModel,
 } from "../models/app.model"
 
 export const applicationController = new Elysia()
@@ -140,6 +142,7 @@ export const applicationController = new Elysia()
       .post(
         "/page/component/update",
         ({ applicationService, body }) => {
+          console.log("controller body", body)
           return applicationService.updatePageComponent(body)
         },
         {
@@ -165,6 +168,49 @@ export const applicationController = new Elysia()
         {
           auth: true,
           body: componentMoveModel,
+        },
+      ),
+  )
+  .group("/component/asset", (asset) =>
+    asset
+      .get(
+        "/asset",
+        ({ applicationService, query }) => {
+          const { assetId, componentId } = query
+          if (!assetId || !componentId) {
+            throw new Error("ID is required")
+          }
+
+          return applicationService.getComponentAsset({ assetId, componentId })
+        },
+        {
+          auth: true,
+          query: getAssetModel,
+        },
+      )
+      .post(
+        "/upload",
+        ({ applicationService, body }) => {
+          return applicationService.uploadAsset(body)
+        },
+        {
+          auth: true,
+          body: uploadAssetModel,
+        },
+      )
+      .post(
+        "/remove",
+        ({ applicationService, body }) => {
+          const { assetId, componentId } = body
+          if (!assetId || !componentId) {
+            throw new Error("ID is required")
+          }
+
+          return applicationService.removeAsset(body)
+        },
+        {
+          auth: true,
+          body: getAssetModel,
         },
       ),
   )

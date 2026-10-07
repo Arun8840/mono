@@ -22,7 +22,7 @@ export const pageCreationModel = t.Object({
     minLength: 1,
     error: "Application ID is required",
   }),
-  styles: t.Optional(t.Object({})),
+  styles: t.Optional(t.Record(t.String(), t.Any())),
 })
 export const pageDeleteModel = t.Object({
   appId: t.String({ minLength: 1, error: "Application ID is required" }),
@@ -36,7 +36,7 @@ export const pageUpdateModel = t.Object({
     minLength: 1,
     error: "Application ID is required",
   }),
-  styles: t.Optional(t.Object({})),
+  styles: t.Optional(t.Record(t.String(), t.Any())),
 })
 
 // * APPLICATION PAGE COMPONENTS MODEL
@@ -51,7 +51,7 @@ export const componentCreationModel = t.Object({
     minLength: 1,
     error: "Page ID is required",
   }),
-  styles: t.Optional(t.Object({})),
+  styles: t.Optional(t.Record(t.String(), t.Any())),
   position: t.Optional(
     t.Object({
       x: t.Number(),
@@ -90,7 +90,7 @@ export const componentUpdateModel = t.Object({
     minLength: 1,
     error: "Page ID is required",
   }),
-  styles: t.Optional(t.Object({})),
+  styles: t.Optional(t.Record(t.String(), t.Any())),
   position: t.Optional(
     t.Object({
       x: t.Number(),
@@ -127,6 +127,27 @@ export const componentMoveModel = t.Object({
   }),
 })
 
+export const getAssetModel = t.Object({
+  assetId: t.String(),
+  componentId: t.String(),
+})
+
+export const uploadAssetModel = t.Object({
+  componentId: t.String(),
+  file: t.File({
+    type: ["image/*", "image/jpeg", "image/png", "image/gif", "image/webp"],
+    maxSize: "5m",
+    error: "File must be an image and less than 5mb",
+  }),
+  applicationId: t.String(),
+})
+
+export const updateAssetModel = t.Object({
+  assetId: t.String(),
+  componentId: t.String(),
+  src: t.String(),
+})
+
 export type ApplicationCreationModel = Static<typeof applicationCreationModel>
 export type ApplicationUpdateModel = Static<typeof applicationUpdateModel>
 export type ApplicationDeleteModel = Static<typeof applicationDeleteModel>
@@ -137,3 +158,6 @@ export type ComponentCreationModel = Static<typeof componentCreationModel>
 export type ComponentRemoveModel = Static<typeof componentRemoveModel>
 export type ComponentUpdateModel = Static<typeof componentUpdateModel>
 export type ComponentMoveModel = Static<typeof componentMoveModel>
+export type GetAssetModel = Static<typeof getAssetModel>
+export type UploadAssetModel = Static<typeof uploadAssetModel>
+export type UpdateAssetModel = Static<typeof updateAssetModel>

@@ -43,7 +43,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
   isPreview,
 }) => {
   const selectedComponent = useApplicationStore(
-    (state) => state.selectedComponentId,
+    (state) => state.selectedComponent,
   )
   const deleteComponent = useApplicationStore((state) => state.removeComponent)
   const resizeComponent = useApplicationStore((state) => state.resizeComponent)
@@ -71,7 +71,7 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
     },
   })
 
-  const isSelected = selectedComponent === value?.id
+  const isSelected = selectedComponent?.id === value?.id
 
   // ? modify component
   const handleSelectComponent = () => {
@@ -195,8 +195,8 @@ const DroppedComponentWrapper: React.FC<DroppedComponentWrapperProps> = ({
           >
             <div
               className={cn(
-                "h-full w-full p-0.5 bg-transparent border border-dashed border-muted",
-                isSelected && "border-dashed border-blue-500",
+                "h-full w-full p-0.5 bg-transparent border border-dashed hover:border-primary",
+                isSelected && "border-dashed border-primary",
               )}
               onMouseDown={(e) => isSelected && e.stopPropagation()}
             >

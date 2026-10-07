@@ -1,6 +1,7 @@
 import { PageTypes } from "@/types/app.type"
+import { componentType } from "@/types/global"
 
 export const initialAppState = {
   page: {} as PageTypes,
-  selectedComponentId: null as string | null,
+  selectedComponent: null as componentType | null,
 }

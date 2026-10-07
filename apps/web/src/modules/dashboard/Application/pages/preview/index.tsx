@@ -61,7 +61,13 @@ function PreviewModule({ appId, pageId }: PagePreviewProps) {
   })
 
   const pageItems = useMemo(() => data?.data, [data])
-  const background = pageItems?.styles?.background
+
+  const backgroundStyle = useMemo(() => {
+    if (pageItems?.styles?.background) {
+      return { background: pageItems?.styles?.background }
+    }
+    return { backgroundColor: "#ffffff" }
+  }, [pageItems?.styles])
 
   const renderComponents = useMemo(() => {
     if (!pageItems?.components) return null
@@ -96,7 +102,7 @@ function PreviewModule({ appId, pageId }: PagePreviewProps) {
           gap: 0,
           padding: 0,
           position: "relative",
-          backgroundColor: background,
+          ...backgroundStyle,
         }}
       >
         {renderComponents}

@@ -10,7 +10,7 @@ import { useApplicationStore } from "@/store/app"
 import { client } from "@repo/server/client"
 import TextEditorToolbar from "../Text-editor"
 
-import { TextStyle, Color } from "@tiptap/extension-text-style"
+import { TextStyle, Color, FontSize } from "@tiptap/extension-text-style"
 
 export interface DroppedButtonProps extends ComponentWrapperProps {}
 const DroppedButton: React.FC<DroppedButtonProps> = ({
@@ -18,7 +18,7 @@ const DroppedButton: React.FC<DroppedButtonProps> = ({
   dimensions,
   isPreview,
 }) => {
-  const { properties } = value
+  const { properties, styles } = value
   const content = properties?.content || "<p>Button</p>"
   const updateComponent = useApplicationStore((state) => state?.updateComponent)
   const updateComponentMutate = useMutation({
@@ -33,6 +33,7 @@ const DroppedButton: React.FC<DroppedButtonProps> = ({
         types: ["heading", "paragraph"],
       }),
       TextStyle,
+      FontSize,
       Color,
     ],
     content: content,
@@ -56,7 +57,7 @@ const DroppedButton: React.FC<DroppedButtonProps> = ({
       isPreview={isPreview}
       toolbar={<TextEditorToolbar editor={editor} />}
     >
-      <Button className={"w-full h-full"}>
+      <Button id={value?.id} className={"w-full h-full prose"} style={styles}>
         <EditorContent editor={editor} className="outline-none" />
       </Button>
     </DroppedComponentWrapper>

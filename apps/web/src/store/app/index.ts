@@ -65,8 +65,9 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
     }))
   },
   setSelectedComponent: (id: string | null) =>
-    set(() => ({
-      selectedComponentId: id,
+    set((state) => ({
+      selectedComponent:
+        state.page.components.find((comp) => comp.id === id) || null,
     })),
   moveComponent: (id, updates) => {
     set((state) => ({
