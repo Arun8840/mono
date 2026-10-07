@@ -509,6 +509,13 @@ export const createApplicationService = () => {
         })
         .returning()
 
+      await db.update(appComponentsSchemaTable).set({
+        assetId: response?.id,
+      }).where(and(
+        eq(appComponentsSchemaTable.id, asset.componentId),
+        eq(appComponentsSchemaTable.applicationId, asset.applicationId),
+      ))
+
       return {
         status: 200,
         data: response,

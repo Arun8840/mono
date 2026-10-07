@@ -30,6 +30,7 @@ export interface componentType {
   styles?: Partial<ThemePropertyTypes>
   position: PositionType
   properties?: Partial<PropertiesTypes>
+  assetId?: string | null
 }
 
 export interface DragItemTypes extends componentType {

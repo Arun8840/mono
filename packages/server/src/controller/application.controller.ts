@@ -175,17 +175,17 @@ export const applicationController = new Elysia()
     asset
       .get(
         "/asset",
-        ({ applicationService, body }) => {
-          const { assetId, componentId } = body
+        ({ applicationService, query }) => {
+          const { assetId, componentId } = query
           if (!assetId || !componentId) {
             throw new Error("ID is required")
           }
 
-          return applicationService.getComponentAsset(body)
+          return applicationService.getComponentAsset({ assetId, componentId })
         },
         {
           auth: true,
-          body: getAssetModel,
+          query: getAssetModel,
         },
       )
       .post(

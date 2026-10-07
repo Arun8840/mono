@@ -6,6 +6,7 @@ import { pgTable } from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { index } from "drizzle-orm/pg-core"
 import type { CSSProperties } from "react"
+import { assetSchemaTable } from "./asset-schema"
 export type PositionType = {
   x: number
   y: number
@@ -71,6 +72,7 @@ export const appComponentsSchemaTable = pgTable(
     styles: jsonb("styles").$type<CSSProperties>().default({}),
     position: jsonb("position").$type<PositionType>().notNull(),
     properties: jsonb("properties").$type<PropertiesTypes>(),
+    assetId: text("assetId")
   },
   (table) => {
     return {

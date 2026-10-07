@@ -4,7 +4,7 @@ import { ComponentWrapperProps } from "@/types/comp.wrapper.types";
 import { Button, Spinner, toast } from "@repo/ui/components";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { UploadFreeIcons } from "@hugeicons/core-free-icons";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { client } from "@repo/server/client";
 
 export interface ImageComponentProps extends ComponentWrapperProps { }
@@ -13,12 +13,36 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
   dimensions,
   isPreview,
 }) => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["get-asset", value.assetId],
+    queryFn: async () => {
+      const assetId = value.assetId
+      const componentId = value.id
+
+      if (!assetId) {
+        throw new Error("Asset not found")
+      }
+
+      const response = await client.component.asset.asset.get({
+        query: { assetId, componentId },
+      })
+
+      if (response.error) {
+        throw new Error(
+          response.error.value?.message || "Failed to fetch asset",
+        )
+      }
+
+      return response.data.data
+    },
+    enabled: !!value.assetId,
+  });
+
+  console.log(data)
   const uploaderRef = useRef<HTMLInputElement>(null);
   const blobUrlRef = useRef<string | null>(null);
   const { properties } = value;
   const [image, setImage] = useState<string | undefined>();
-
-  console.log(value)
 
   useEffect(() => {
     if (properties?.src) {
@@ -27,13 +51,15 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
         blobUrlRef.current = null;
       }
       setImage(properties.src);
+    } else if (data?.src) {
+      setImage(data.src);
     }
     return () => {
       if (blobUrlRef.current) {
         URL.revokeObjectURL(blobUrlRef.current);
       }
     };
-  }, [properties?.src]);
+  }, [properties?.src, data?.src]);
 
   //*HOOKS
   const createAsset = useMutation({
@@ -119,7 +145,19 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
       isPreview={isPreview}
     >
       <div className="size-full">
-        {image ? createImagePreview() : createUploader()}
+        {image ? (
+          createImagePreview()
+        ) : isLoading ? (
+          <div className="size-full grid place-items-center">
+            <Spinner />
+          </div>
+        ) : isError ? (
+          <p className="text-destructive text-sm">
+            {error?.message || "Failed to load image"}
+          </p>
+        ) : (
+          createUploader()
+        )}
       </div>
     </DroppedComponentWrapper>
   );
