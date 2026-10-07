@@ -1,5 +1,5 @@
 {
-  "id": "dc5480ff-ba5d-4c8b-9367-78b7221806bf",
+  "id": "457e503c-9f45-4538-b73e-1b6a914b3c67",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -668,6 +668,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "src": {
+          "name": "src",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "componentId": {
           "name": "componentId",
           "type": "uuid",
@@ -677,12 +683,6 @@
         "applicationId": {
           "name": "applicationId",
           "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "src": {
-          "name": "src",
-          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -703,12 +703,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "assets_id_components_id_fk": {
-          "name": "assets_id_components_id_fk",
+        "assets_componentId_components_id_fk": {
+          "name": "assets_componentId_components_id_fk",
           "tableFrom": "assets",
           "tableTo": "components",
           "columnsFrom": [
-            "id"
+            "componentId"
           ],
           "columnsTo": [
             "id"

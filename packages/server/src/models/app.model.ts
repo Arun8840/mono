@@ -133,9 +133,12 @@ export const getAssetModel = t.Object({
 })
 
 export const uploadAssetModel = t.Object({
-  id: t.String(),
   componentId: t.String(),
-  src: t.String(),
+  file: t.File({
+    type: ["image/*", "image/jpeg", "image/png", "image/gif", "image/webp"],
+    maxSize: "5m",
+    error: "File must be an image and less than 5mb",
+  }),
   applicationId: t.String(),
 })
 

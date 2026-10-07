@@ -191,11 +191,6 @@ export const applicationController = new Elysia()
       .post(
         "/upload",
         ({ applicationService, body }) => {
-          const { src, componentId } = body
-          if (!src || !componentId) {
-            throw new Error("asset data is required")
-          }
-
           return applicationService.uploadAsset(body)
         },
         {

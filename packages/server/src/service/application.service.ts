@@ -19,10 +19,8 @@ import {
   PageCreationModel,
   PageDeleteModel,
   PageUpdateModel,
-  UpdateAssetModel,
   UploadAssetModel,
 } from "../models/app.model"
-import { status } from "elysia"
 
 export const createApplicationService = () => {
   return {
@@ -485,18 +483,30 @@ export const createApplicationService = () => {
       }
     },
     uploadAsset: async (asset: UploadAssetModel) => {
-      if (!asset?.src || !asset?.componentId) {
-        throw new Error("Invalid component data", {
-          cause: {
-            status: 400,
-            message: "Invalid asset data",
-          },
-        })
+      if (!asset?.file || !asset?.componentId) {
+        throw new Error("Invalid component data")
       }
+
+      const fileId = crypto.randomUUID()
+      const fileExtension = asset.file.name.split(".").pop() || "png"
+      const fileName = `${fileId}.${fileExtension}`
+      const dbSrc = `/uploads/${fileName}`
 
       const [response] = await db
         .insert(assetSchemaTable)
-        .values(asset)
+        .values({
+          id: crypto.randomUUID(),
+          applicationId: asset.applicationId,
+          componentId: asset.componentId,
+          src: dbSrc,
+        })
+        .onConflictDoUpdate({
+          target: assetSchemaTable.id,
+          set: {
+            src: dbSrc,
+            updatedAt: new Date(),
+          },
+        })
         .returning()
 
       return {

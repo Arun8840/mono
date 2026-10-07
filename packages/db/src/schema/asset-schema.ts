@@ -6,20 +6,19 @@ import { relations } from "drizzle-orm"
 import { text } from "drizzle-orm/pg-core"
 
 export const assetSchemaTable = pgTable("assets", {
-  id: uuid("id")
-    .primaryKey()
+  id: uuid("id").primaryKey(),
+  src: text("src").notNull(),
+  componentId: uuid("componentId")
     .references(() => appComponentsSchemaTable.id, { onDelete: "cascade" })
     .notNull(),
-  componentId: uuid("componentId").notNull(),
   applicationId: uuid("applicationId").notNull(),
-  src: text("src").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 })
 
 export const assetsRelations = relations(assetSchemaTable, ({ one }) => ({
-  appPage: one(appComponentsSchemaTable, {
-    fields: [assetSchemaTable.componentId],
+  component: one(appComponentsSchemaTable, {
+    fields: [assetSchemaTable.id],
     references: [appComponentsSchemaTable.id],
   }),
 }))
